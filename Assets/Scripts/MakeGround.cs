@@ -27,10 +27,12 @@ public class MakeGround : MonoBehaviour {
 	//Factors that determine grid features
 	public int hills;
 	public int rubbles;
+	public int forests;
 	
 	//Default grid feature numbers
 	int hillsD = 10;
 	int rubblesD = 10;
+	int forestsD = 10;
 	
 	GameObject[,] grid;
 	float xSize;
@@ -58,7 +60,7 @@ public class MakeGround : MonoBehaviour {
 		}
 		if(!hill)
 		{
-			terrain = (GameObject)Resources.Load("Hill");
+			hill = (GameObject)Resources.Load("Hill");
 		}
 		if(!rubbleA)
 		{
@@ -89,6 +91,10 @@ public class MakeGround : MonoBehaviour {
 		if(rubbles == 0)
 		{
 			rubbles = rubblesD;	
+		}
+		if(forests == 0)
+		{
+			forests = forestsD;	
 		}
 		
 		xSize = terrain.transform.localScale.x;
@@ -175,7 +181,7 @@ public class MakeGround : MonoBehaviour {
 	void addFeatures()
 	{
 		int xRand, zRand;
-		int hillsLeft, rubblesLeft;
+		int hillsLeft, rubblesLeft, forestsLeft;
 		
 		
 		hillsLeft = hills;
@@ -232,8 +238,25 @@ public class MakeGround : MonoBehaviour {
 				
 				grid[zRand,xRand].gameObject.renderer.material = Resources.Load("Materials/Rubble", typeof(Material)) as Material;
 				rubblesClone.renderer.material = Resources.Load("Materials/Rubble", typeof(Material)) as Material;
+			}			
+		}
+		
+		forestsLeft = forests;
+		while(forestsLeft > 0)
+		{
+			xRand = Random.Range(0, xLength - 1);
+			zRand = Random.Range(0, zLength - 1);
+			
+			terrainScript = grid[zRand,xRand].gameObject.GetComponent("TerrainScript") as TerrainScript;
+			if(terrainScript.terrainType != "Goal" && terrainScript.terrainType != "Start" && terrainScript.terrainType != "Hill" && terrainScript.terrainType != "Rubble" && terrainScript.terrainType != "Forest")
+			{
+				terrainScript.terrainType = "Forest";
+				forestsLeft--;
+				
+				grid[zRand,xRand].gameObject.renderer.material = Resources.Load("Materials/Forest", typeof(Material)) as Material;
 			}
 		}
+		
 	}
 
 
