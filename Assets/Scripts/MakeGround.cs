@@ -44,6 +44,17 @@ public class MakeGround : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () 
+	{		
+		startMakeGrid();
+	}
+	
+	// Update is called once per frame
+	void Update () 
+	{
+		
+	}
+	
+	void startMakeGrid()
 	{
 		if(xLength == 0)
 		{
@@ -103,14 +114,6 @@ public class MakeGround : MonoBehaviour {
 		
 		makeGrid ();
 		modifyGrid();
-		
-		
-	}
-	
-	// Update is called once per frame
-	void Update () 
-	{
-		
 	}
 	
 	void makeGrid()
@@ -260,6 +263,38 @@ public class MakeGround : MonoBehaviour {
 	}
 
 
-
+	public string getMaterialFromTerrain(string t)
+	{
+		if(t == "start")
+		{
+			
+		}
+		else if(t == "Goal")
+		{
+			
+		}
+		else if(t == "Hill")
+		{
+			return "Materials/Hill";
+		}
+		else if(t == "Forest")
+		{
+			return "Materials/Forest";	
+		}
+		else if(t == "Rubble")
+		{
+		return "Materials/Rubble";
+		}
+		else if(t == "BasicGround")
+		{
+			
+		}
+		else
+		{
+			return "Materials/Forest";	
+		}
+		
+		return "blank";
+	}
 
 }
