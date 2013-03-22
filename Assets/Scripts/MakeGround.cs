@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MakeGround : MonoBehaviour {
 	
@@ -9,6 +10,7 @@ public class MakeGround : MonoBehaviour {
 	 * Basic Area: Default
 	 * Hill: Hill
 	 * Rubble (impassible): Rubble
+	 * Forest: Forest
 	*/
 	
 	public int xLength;
@@ -34,17 +36,41 @@ public class MakeGround : MonoBehaviour {
 	int rubblesD = 10;
 	int forestsD = 10;
 	
-	GameObject[,] grid;
+	public GameObject[,] grid;
 	float xSize;
 	float zSize;
 	TerrainScript terrainScript;
 	
+	public int mCostDefault;
+	public int mCostStart;
+	public int mCostGoal;
+	public int mCostHill;
+	public int mCostForest;
+	public int mCostRubble;
 	
-	Vector2[] GoalSpots = {new Vector2(7,7), new Vector2(3,3), new Vector2(3,11), new Vector2(11,3), new Vector2(11,11)};
+	public bool isAccessibleDefault;
+	public bool isAccessibleStart;
+	public bool isAccessibleGoal;
+	public bool isAccessibleHill;
+	public bool isAccessibleForest;
+	public bool isAccessibleRubble;
+	
+	public int defenseBonusDefault;
+	public int defenseBonusStart;
+	public int defenseBonusGoal;
+	public int defenseBonusHill;
+	public int defenseBonusForest;
+	public int defenseBonusRubble;
+	
+	public Dictionary<string,int> mCost = new Dictionary<string,int>();
+	public Dictionary<string,bool> isAccessible = new Dictionary<string,bool>();
+	public Dictionary<string,int> defenseBonus = new Dictionary<string,int>();
+	public Dictionary<string, string> materials = new Dictionary<string, string>();
 
 	// Use this for initialization
 	void Start () 
 	{		
+		setTerrainAttributes();
 		startMakeGrid();
 	}
 	
@@ -52,6 +78,58 @@ public class MakeGround : MonoBehaviour {
 	void Update () 
 	{
 		
+	}
+	
+	void setTerrainAttributes()
+	{
+		if(mCostDefault == 0)
+		{
+			mCostDefault = 1;
+		}
+		if(mCostStart == 0)
+		{
+			mCostStart = 1;	
+		}
+		if(mCostGoal == 0)
+		{
+			mCostGoal = 1;
+		}
+		if(mCostHill == 0)
+		{
+			mCostHill = 1;
+		}
+		if(mCostForest == 0)
+		{
+			mCostForest = 1;
+		}
+		
+		mCost["Default"] = mCostDefault;
+		mCost["Start"] = mCostStart;
+		mCost["Goal"] = mCostGoal;
+		mCost["Hill"] = mCostHill;
+		mCost["Forest"] = mCostForest;
+		mCost["Rubble"] = 0;
+		
+		isAccessible["Default"] = isAccessibleDefault;
+		isAccessible["Start"] = isAccessibleStart;
+		isAccessible["Goal"] = isAccessibleGoal;
+		isAccessible["Hill"] = isAccessibleHill;
+		isAccessible["Forest"] = isAccessibleForest;
+		isAccessible["Rubble"] = isAccessibleRubble;
+		
+		defenseBonus["Default"] = defenseBonusDefault;
+		defenseBonus["Start"] = defenseBonusStart;
+		defenseBonus["Goal"] = defenseBonusGoal;
+		defenseBonus["Hill"] = defenseBonusHill;
+		defenseBonus["Forest"] = defenseBonusForest;
+		defenseBonus["Rubble"] = defenseBonusRubble;
+		
+		materials["Default"] ="Materials/BasicGround";
+		materials["Start"] = "Materials/StartingArea";
+		materials["Goal"] = "Materials/radioactiveSpot";
+		materials["Hill"] = "Materials/Hill";
+		materials["Forest"] = "Materials/Forest";	
+		materials["Rubble"] = "Materials/Rubble";
 	}
 	
 	void startMakeGrid()
@@ -131,8 +209,7 @@ public class MakeGround : MonoBehaviour {
 				spot.y = BLcorner.y;
 				grid[i,j].transform.localPosition = spot;
 				
-				terrainScript = grid[i,j].gameObject.AddComponent("TerrainScript") as TerrainScript;
-				terrainScript.terrainType = "Default";
+				setTerrainBlock(j, i, "Default", false);
 			}
 		}
 	}
@@ -147,26 +224,15 @@ public class MakeGround : MonoBehaviour {
 	{
 		int i, j;
 		Component temp;
-		for(i = 0; i < 5; i++)
-		{
-			grid[(int)GoalSpots[i].y, (int)GoalSpots[i].x].renderer.material = Resources.Load("Materials/radioactiveSpot", typeof(Material)) as Material;	
-			temp = grid[(int)GoalSpots[i].y, (int)GoalSpots[i].x].AddComponent("ParticleSystem");
-			temp.particleSystem.startColor = new Color(0, 255, 0);
-			temp.particleSystem.startLifetime = 3;
-			
-			terrainScript = grid[(int)GoalSpots[i].y, (int)GoalSpots[i].x].GetComponent("TerrainScript") as TerrainScript;;
-			terrainScript.terrainType = "Goal";
-			
-		}
+		
+		makeGoalSpots();
 		
 		int zStart = (zLength/2) - (zStartSize/2);
 		for(i = zStart; i < zStart + zStartSize; i++)
 		{
 			for(j = 0; j < xStartSize; j++)
 			{
-				grid[i,j].renderer.material = Resources.Load("Materials/StartingArea", typeof(Material)) as Material;
-				terrainScript = grid[i,j].GetComponent("TerrainScript") as TerrainScript;;
-				terrainScript.terrainType = "Start";
+				setTerrainBlock(j,i, "Start", false);
 			}
 		}
 		
@@ -174,11 +240,30 @@ public class MakeGround : MonoBehaviour {
 		{
 			for(j = xLength - 1; j + xStartSize > xLength - 1; j--)
 			{
-				grid[i,j].renderer.material = Resources.Load("Materials/StartingArea", typeof(Material)) as Material;
-				terrainScript = grid[i,j].GetComponent("TerrainScript") as TerrainScript;;
-				terrainScript.terrainType = "Start";
+				setTerrainBlock(j,i, "Start", false);
 			}
 		}
+	}
+	
+	void makeGoalSpots()
+	{
+		int x, z;
+		z = zLength/2;
+		x = xLength/2;
+		setTerrainBlock(x, z, "Goal", false);
+		
+		z = zLength/3 - 2;
+		x = xLength/3 - 1;
+		setTerrainBlock(x, z, "Goal", false);
+		
+		x = xLength*2/3;
+		setTerrainBlock(x, z, "Goal", false);
+		
+		z = zLength*2/3 + 1;
+		setTerrainBlock(x, z, "Goal", false);
+		
+		x = xLength/3 - 1;
+		setTerrainBlock(x, z, "Goal", false);
 	}
 
 	void addFeatures()
@@ -188,7 +273,6 @@ public class MakeGround : MonoBehaviour {
 		
 		
 		hillsLeft = hills;
-		GameObject hillClone;
 		
 		while(hillsLeft > 0)
 		{
@@ -198,15 +282,8 @@ public class MakeGround : MonoBehaviour {
 			terrainScript = grid[zRand,xRand].gameObject.GetComponent("TerrainScript") as TerrainScript;
 			if(terrainScript.terrainType != "Goal" && terrainScript.terrainType != "Start" && terrainScript.terrainType != "Hill")
 			{
-				terrainScript.terrainType = "Hill";
 				hillsLeft--;
-				
-				hillClone = Instantiate(hill) as GameObject;
-				hillClone.transform.parent = grid[zRand,xRand].gameObject.transform;
-				hillClone.transform.localPosition = new Vector3(0, 1, 0);
-				
-				grid[zRand,xRand].gameObject.renderer.material = Resources.Load("Materials/Hill", typeof(Material)) as Material;
-				hillClone.renderer.material = Resources.Load("Materials/Hill", typeof(Material)) as Material;
+				setTerrainBlock(xRand, zRand, "Hill", false);
 			}
 		}
 		
@@ -220,27 +297,8 @@ public class MakeGround : MonoBehaviour {
 			terrainScript = grid[zRand,xRand].gameObject.GetComponent("TerrainScript") as TerrainScript;
 			if(terrainScript.terrainType != "Goal" && terrainScript.terrainType != "Start" && terrainScript.terrainType != "Hill"  && terrainScript.terrainType != "Rubble")
 			{
-				terrainScript.terrainType = "Rubble";
 				rubblesLeft--;
-				
-				rubblesClone = Instantiate(rubbleA) as GameObject;
-				rubblesClone.transform.parent = grid[zRand,xRand].gameObject.transform;
-				rubblesClone.transform.localPosition = new Vector3(0f, 1f, .3f);
-				rubblesClone.renderer.material = Resources.Load("Materials/Rubble", typeof(Material)) as Material;
-				
-				rubblesClone = Instantiate(rubbleB) as GameObject;
-				rubblesClone.transform.parent = grid[zRand,xRand].gameObject.transform;
-				rubblesClone.transform.localPosition = new Vector3(0, 2, 0);
-				rubblesClone.transform.localScale = new Vector3(.2f, 1.5f, .2f);
-				rubblesClone.transform.localRotation = Quaternion.Euler(15, 0, 0);
-				rubblesClone.renderer.material = Resources.Load("Materials/Rubble", typeof(Material)) as Material;
-				
-				rubblesClone = Instantiate(rubbleC) as GameObject;
-				rubblesClone.transform.parent = grid[zRand,xRand].gameObject.transform;
-				rubblesClone.transform.localPosition = new Vector3(0f, 1f, .07f);
-				
-				grid[zRand,xRand].gameObject.renderer.material = Resources.Load("Materials/Rubble", typeof(Material)) as Material;
-				rubblesClone.renderer.material = Resources.Load("Materials/Rubble", typeof(Material)) as Material;
+				setTerrainBlock(xRand, zRand, "Rubble", false);
 			}			
 		}
 		
@@ -253,48 +311,88 @@ public class MakeGround : MonoBehaviour {
 			terrainScript = grid[zRand,xRand].gameObject.GetComponent("TerrainScript") as TerrainScript;
 			if(terrainScript.terrainType != "Goal" && terrainScript.terrainType != "Start" && terrainScript.terrainType != "Hill" && terrainScript.terrainType != "Rubble" && terrainScript.terrainType != "Forest")
 			{
-				terrainScript.terrainType = "Forest";
+				setTerrainBlock(xRand, zRand, "Forest", false);
 				forestsLeft--;
-				
-				grid[zRand,xRand].gameObject.renderer.material = Resources.Load("Materials/Forest", typeof(Material)) as Material;
 			}
 		}
 		
-	}
-
-
-	public string getMaterialFromTerrain(string t)
+	}	
+	
+	//childFlag lets the function know if this is for the child of a terrain block if true
+	void setTerrainBlock(int x, int z, string type, bool childFlag, GameObject child = null)
 	{
-		if(t == "start")
+		TerrainScript t;
+		
+		GameObject tmp;
+		
+		tmp = childFlag ? child : grid[z,x];
+		
+
+		t = tmp.GetComponent("TerrainScript") as TerrainScript;
+		
+		if(t == null)
 		{
-			
-		}
-		else if(t == "Goal")
-		{
-			
-		}
-		else if(t == "Hill")
-		{
-			return "Materials/Hill";
-		}
-		else if(t == "Forest")
-		{
-			return "Materials/Forest";	
-		}
-		else if(t == "Rubble")
-		{
-		return "Materials/Rubble";
-		}
-		else if(t == "BasicGround")
-		{
-			
-		}
-		else
-		{
-			return "Materials/Forest";	
+			t = tmp.gameObject.AddComponent("TerrainScript") as TerrainScript;	
 		}
 		
-		return "blank";
+		t.terrainType = type;
+		t.movementCost = mCost[type];
+		t.isAccessible = isAccessible[type];
+		t.defenseBonus = defenseBonus[type];
+		t.zValue = z;
+		t.xValue = x;
+		
+		tmp.renderer.material = Resources.Load(materials[type], typeof(Material)) as Material;
+		
+		if(type == "Goal")
+		{
+			setTerrainBlockIfGoal(x,z);
+		}
+		if(type == "Hill" && !childFlag)
+		{
+			setTerrainBlockIfHill(x, z);	
+		}
+		if(type == "Rubble" && !childFlag)
+		{
+			setTerrainBlockIfRubble(x, z);	
+		}
 	}
-
+	
+	void setTerrainBlockIfGoal(int x, int z)
+	{
+		Component temp;	
+		temp = grid[z, x].AddComponent("ParticleSystem");
+		temp.particleSystem.startColor = new Color(0, 255, 0);
+		temp.particleSystem.startLifetime = 3;
+	}
+	
+	void setTerrainBlockIfHill(int x, int z)
+	{
+		GameObject hillClone = Instantiate(hill) as GameObject;
+		hillClone.transform.parent = grid[z,x].gameObject.transform;
+		hillClone.transform.localPosition = new Vector3(0, 1, 0);
+		setTerrainBlock(x, z, "Hill", true, hillClone);
+	}
+	
+	void setTerrainBlockIfRubble(int x, int z)
+	{
+		GameObject rubblesClone;
+		
+		rubblesClone = Instantiate(rubbleA) as GameObject;
+		rubblesClone.transform.parent = grid[z,x].gameObject.transform;
+		rubblesClone.transform.localPosition = new Vector3(0f, 1f, .3f);
+		setTerrainBlock(x,z,"Rubble", true, rubblesClone);
+		
+		rubblesClone = Instantiate(rubbleB) as GameObject;
+		rubblesClone.transform.parent = grid[z,x].gameObject.transform;
+		rubblesClone.transform.localPosition = new Vector3(0, 2, 0);
+		rubblesClone.transform.localScale = new Vector3(.2f, 1.5f, .2f);
+		rubblesClone.transform.localRotation = Quaternion.Euler(15, 0, 0);
+		setTerrainBlock(x,z,"Rubble", true, rubblesClone);
+		
+		rubblesClone = Instantiate(rubbleC) as GameObject;
+		rubblesClone.transform.parent = grid[z,x].gameObject.transform;
+		rubblesClone.transform.localPosition = new Vector3(0f, 1f, .07f);
+		setTerrainBlock(x,z,"Rubble", true, rubblesClone);
+	}
 }

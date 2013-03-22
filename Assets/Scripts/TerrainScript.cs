@@ -7,6 +7,10 @@ public class TerrainScript : MonoBehaviour {
 	public int movementCost;
 	public bool isAccessible;
 	public int defenseBonus;
+	
+	//terrain grid is of form grid[z,x]
+	public int zValue;
+	public int xValue;
 
 	// Use this for initialization
 	void Start () 
