@@ -12,23 +12,23 @@ public class TerrainScript : MonoBehaviour {
 	public int zValue;
 	public int xValue;
 	
-	public GameObject groundMaker;
+	public GameObject gameMaster;
 
 	// Use this for initialization
 	void Start () 
 	{
-		groundMaker = GameObject.Find("GameMaster");
+		gameMaster = GameObject.Find("GameMaster");
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
-	
+		
 	}
 	
 	void OnMouseDown()
 	{
 		PlayerMovement playMove = new PlayerMovement(xValue, zValue, 4, 1);
-		groundMaker.SendMessage("colorGroundFromUnit", playMove);
+		gameMaster.SendMessage("changeGroundColorMaster", playMove);
 	}
 }

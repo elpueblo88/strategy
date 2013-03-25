@@ -70,8 +70,7 @@ public class MakeGround : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{		
-		setTerrainAttributes();
-		startMakeGrid();
+		
 	}
 	
 	// Update is called once per frame

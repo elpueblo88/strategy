@@ -21,6 +21,11 @@ public class GridFunction : MonoBehaviour {
 	void changeGroundColor(int x, int z, Color color)
 	{
 		ground.grid[z,x].renderer.material.color = color;
+		
+		foreach(Transform child in ground.grid[z,x].transform)
+		{
+			child.transform.gameObject.renderer.material.color = color;	
+		}
 	}
 	
 	void colorGroundFromUnit(PlayerMovement playMove)
@@ -44,11 +49,11 @@ public class GridFunction : MonoBehaviour {
 		/*
 		 * currently not used method of going through linkedlist
 		LinkedListNode<Vector2> node = list.First;
-		while(node.Next != null)
+		while(node != null)
 		{
-			node = node.Next;
 			System.Console.WriteLine(node.Value.x + " " + node.Value.y);
 			changeGroundColor((int)node.Value.x, (int)node.Value.y, color);
+			node = node.Next;
 		}
 		*/
 		
@@ -70,17 +75,10 @@ public class GridFunction : MonoBehaviour {
 	}
 	
 	void testIndividualSpots(ref LinkedList<Vector2> list, int x, int z, int moves)
-	{
-		TerrainScript t;
-		
+	{		
 		int location = 0;
 		
-		if(moves <= 0)
-		{
-			return;	
-		}
-		
-		t = ground.grid[z,x].GetComponent("TerrainScript") as TerrainScript;
+		TerrainScript t = ground.grid[z,x].GetComponent("TerrainScript") as TerrainScript;
 		if(!t.isAccessible)
 		{
 			return;	
@@ -89,6 +87,11 @@ public class GridFunction : MonoBehaviour {
 		if(list.Contains(new Vector2(x,z)) != true)
 		{
 			list.AddLast(new Vector2(x,z));
+		}
+		
+		if(moves <= 0)
+		{
+			return;	
 		}
 			
 		if(x > 0)
