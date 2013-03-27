@@ -6,12 +6,16 @@ public class GameMaster : MonoBehaviour {
 	int currentPlayer = 1;
 	PlayerMovement lastPlayMove = null;
 	
-	bool isBattleGUIActive;
+	bool isEnemyAI = false;
 	
+	
+	//scripts to talk with
 	MakeGround ground;
 	GridFunction gridFunc;
 	
+	//GUI things
 	public GUIStyle bottomArea;
+	bool isBattleGUIActive;
 	
 	// Use this for initialization
 	void Start () 
@@ -35,17 +39,17 @@ public class GameMaster : MonoBehaviour {
 				//isBattleGUIActive = false;
 				
 				lastPlayMove.player = 3;
-				this.SendMessage("colorGroundFromUnit", lastPlayMove);
-				
+				this.SendMessage("colorGroundFromUnit", lastPlayMove);				
 			}
 		}
 	}
 	
+	
+	//Message Center
 	void changeGroundColorMaster(PlayerMovement play)
 	{		
 		if(lastPlayMove != null)
 		{
-			print ("here");
 			lastPlayMove.player = 3;
 			this.SendMessage("colorGroundFromUnit", lastPlayMove);
 		}
@@ -53,6 +57,12 @@ public class GameMaster : MonoBehaviour {
 		this.SendMessage("colorGroundFromUnit", play);
 		lastPlayMove = play;
 	}
+	
+	void getStartLocations()
+	{
+		gridFunc.SendMessage("sendAIStartLocations");
+	}
+	
 	
 	void changeBattleGUIActive(bool newValue)
 	{

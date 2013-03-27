@@ -5,11 +5,26 @@ using System.Collections.Generic;
 public class GridFunction : MonoBehaviour {
 	
 	MakeGround ground;
+	
+	/*
+	 * AI elements needed from Rachid
+	public GameObject ai;
+	AIscript aiscript;
+	*/
 
 	// Use this for initialization
 	void Start () 
 	{
 		ground = gameObject.GetComponent<MakeGround>();
+		
+		/*
+		 * AI stuff
+		if(AI == null)
+		{
+			ai = GameObject.Find("GameMaster");	
+		}
+		aiscript = ai.GetComponent<aiscript>();
+		*/
 	}
 	
 	// Update is called once per frame
@@ -130,4 +145,14 @@ public class GridFunction : MonoBehaviour {
 			}
 		}
 	}
+	
+	/*
+	 * Functions to work with AI stuff
+	 * need name of method to store the array
+	void sendAIStartLocations()
+	{
+		ai.SendMessage("", ground.player1StartLocations);
+		ai.SendMessage("", ground.player2StartLocations);
+	}
+	*/
 }
