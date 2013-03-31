@@ -20,6 +20,7 @@ public class GameMaster : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
+		/*
 		ground = gameObject.GetComponent<MakeGround>();
 		
 		//used to set up attributes of board and then create it
@@ -27,6 +28,7 @@ public class GameMaster : MonoBehaviour {
 		ground.SendMessage("startMakeGrid");
 		
 		isBattleGUIActive = false;
+		*/
 	}
 	
 	// Update is called once per frame
@@ -44,8 +46,23 @@ public class GameMaster : MonoBehaviour {
 		}
 	}
 	
+	void actualStart()
+	{
+		ground = gameObject.GetComponent<MakeGround>();
+		
+		//used to set up attributes of board and then create it
+		ground.SendMessage("setTerrainAttributes");
+		ground.SendMessage("startMakeGrid");
+		
+		isBattleGUIActive = false;
+	}
 	
-	//Message Center
+	void sendBoardCorners()
+	{
+		this.actualStart();
+		this.SendMessage("returnBoardCorners");	
+	}
+	
 	void changeGroundColorMaster(PlayerMovement play)
 	{		
 		if(lastPlayMove != null)
@@ -58,11 +75,11 @@ public class GameMaster : MonoBehaviour {
 		lastPlayMove = play;
 	}
 	
+	//Message Center
 	void getStartLocations()
 	{
 		gridFunc.SendMessage("sendAIStartLocations");
 	}
-	
 	
 	void changeBattleGUIActive(bool newValue)
 	{

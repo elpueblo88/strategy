@@ -42,8 +42,8 @@ public class MakeGround : MonoBehaviour {
 	int forestsD = 10;
 	
 	public GameObject[,] grid;
-	float xSize;
-	float zSize;
+	public float xSize;
+	public float zSize;
 	TerrainScript terrainScript;
 	
 	public int mCostDefault;
@@ -357,6 +357,7 @@ public class MakeGround : MonoBehaviour {
 		t.defenseBonus = defenseBonus[type];
 		t.zValue = z;
 		t.xValue = x;
+		t.height = BLcorner.y + grid[z,x].transform.localScale.y/2;
 		
 		tmp.renderer.material = Resources.Load(materials[type], typeof(Material)) as Material;
 		
@@ -364,9 +365,13 @@ public class MakeGround : MonoBehaviour {
 		{
 			setTerrainBlockIfGoal(x,z);
 		}
-		if(type == "Hill" && !childFlag)
+		if(type == "Hill")
 		{
-			setTerrainBlockIfHill(x, z);	
+			t.height = t.height + hill.transform.localPosition.y/2;
+			if(!childFlag)
+			{
+				setTerrainBlockIfHill(x, z);	
+			}
 		}
 		if(type == "Rubble" && !childFlag)
 		{

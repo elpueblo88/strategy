@@ -5,6 +5,8 @@ using System.Collections.Generic;
 public class GridFunction : MonoBehaviour {
 	
 	MakeGround ground;
+	public GameObject cameraControl;
+	
 	
 	/*
 	 * AI elements needed from Rachid
@@ -16,6 +18,10 @@ public class GridFunction : MonoBehaviour {
 	void Start () 
 	{
 		ground = gameObject.GetComponent<MakeGround>();
+		if(cameraControl == null)
+		{
+			cameraControl = GameObject.Find("Main Camera");	
+		}
 		
 		/*
 		 * AI stuff
@@ -144,6 +150,16 @@ public class GridFunction : MonoBehaviour {
 				testIndividualSpots(ref list, x, z - 1, moves - t.movementCost);
 			}
 		}
+	}
+	
+	void returnBoardCorners()
+	{
+		this.Start();
+		Vector3[] groundCorners = new Vector3[3];
+		groundCorners[0] = ground.BLcorner;
+		groundCorners[1] = new Vector3(ground.BLcorner.x + ground.xLength * ground.xSize, ground.BLcorner.y, ground.BLcorner.z + ground.zLength * ground.zSize);
+		groundCorners[2] = new Vector3(ground.xLength, ground.grid[0,0].transform.localScale.y, ground.zLength);
+		cameraControl.SendMessage("getCorners", groundCorners);
 	}
 	
 	/*

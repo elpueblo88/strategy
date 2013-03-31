@@ -7,6 +7,7 @@ public class TerrainScript : MonoBehaviour {
 	public int movementCost;
 	public bool isAccessible;
 	public int defenseBonus;
+	public float height;
 	
 	//terrain grid is of form grid[z,x]
 	public int zValue;
@@ -26,6 +27,7 @@ public class TerrainScript : MonoBehaviour {
 		
 	}
 	
+	//changes color of ground
 	void OnMouseDown()
 	{
 		PlayerMovement playMove = new PlayerMovement(xValue, zValue, 4, 1);
