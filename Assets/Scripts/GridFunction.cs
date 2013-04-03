@@ -5,11 +5,32 @@ using System.Collections.Generic;
 public class GridFunction : MonoBehaviour {
 	
 	MakeGround ground;
+	public GameObject cameraControl;
+	
+	
+	/*
+	 * AI elements needed from Rachid
+	public GameObject ai;
+	AIscript aiscript;
+	*/
 
 	// Use this for initialization
 	void Start () 
 	{
 		ground = gameObject.GetComponent<MakeGround>();
+		if(cameraControl == null)
+		{
+			cameraControl = GameObject.Find("Main Camera");	
+		}
+		
+		/*
+		 * AI stuff
+		if(AI == null)
+		{
+			ai = GameObject.Find("GameMaster");	
+		}
+		aiscript = ai.GetComponent<aiscript>();
+		*/
 	}
 	
 	// Update is called once per frame
@@ -130,4 +151,24 @@ public class GridFunction : MonoBehaviour {
 			}
 		}
 	}
+	
+	void returnBoardCorners()
+	{
+		this.Start();
+		Vector3[] groundCorners = new Vector3[3];
+		groundCorners[0] = ground.BLcorner;
+		groundCorners[1] = new Vector3(ground.BLcorner.x + ground.xLength * ground.xSize, ground.BLcorner.y, ground.BLcorner.z + ground.zLength * ground.zSize);
+		groundCorners[2] = new Vector3(ground.xLength, ground.grid[0,0].transform.localScale.y, ground.zLength);
+		cameraControl.SendMessage("getCorners", groundCorners);
+	}
+	
+	/*
+	 * Functions to work with AI stuff
+	 * need name of method to store the array
+	void sendAIStartLocations()
+	{
+		ai.SendMessage("", ground.player1StartLocations);
+		ai.SendMessage("", ground.player2StartLocations);
+	}
+	*/
 }

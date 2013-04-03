@@ -26,6 +26,11 @@ public class MakeGround : MonoBehaviour {
 	public int xStartSize;
 	public int zStartSize;
 	
+	//arrays holding locations of start areas and goals
+	public Vector2[] player1StartLocations;
+	public Vector2[] player2StartLocations;
+	public Vector2[] goalLocations = new Vector2[5];
+	
 	//Factors that determine grid features
 	public int hills;
 	public int rubbles;
@@ -37,8 +42,8 @@ public class MakeGround : MonoBehaviour {
 	int forestsD = 10;
 	
 	public GameObject[,] grid;
-	float xSize;
-	float zSize;
+	public float xSize;
+	public float zSize;
 	TerrainScript terrainScript;
 	
 	public int mCostDefault;
@@ -172,6 +177,9 @@ public class MakeGround : MonoBehaviour {
 			zStartSize = 5;
 		}
 		
+		player1StartLocations = new Vector2[xStartSize*zStartSize];
+		player2StartLocations = new Vector2[xStartSize*zStartSize];
+		
 		if(hills == 0)
 		{
 			hills = hillsD;	
@@ -232,6 +240,8 @@ public class MakeGround : MonoBehaviour {
 			for(j = 0; j < xStartSize; j++)
 			{
 				setTerrainBlock(j,i, "Start", false);
+				
+				player1StartLocations[(i-zStart)*xStartSize + j] = new Vector2(j,i);
 			}
 		}
 		
@@ -240,6 +250,8 @@ public class MakeGround : MonoBehaviour {
 			for(j = xLength - 1; j + xStartSize > xLength - 1; j--)
 			{
 				setTerrainBlock(j,i, "Start", false);
+				
+				player2StartLocations[(i-zStart)*xStartSize + (j - xLength + xStartSize)] = new Vector2(j,i);
 			}
 		}
 	}
@@ -250,19 +262,24 @@ public class MakeGround : MonoBehaviour {
 		z = zLength/2;
 		x = xLength/2;
 		setTerrainBlock(x, z, "Goal", false);
+		goalLocations[0] = new Vector2(z,x);
 		
 		z = zLength/3 - 2;
 		x = xLength/3 - 1;
 		setTerrainBlock(x, z, "Goal", false);
+		goalLocations[1] = new Vector2(z,x);
 		
 		x = xLength*2/3;
 		setTerrainBlock(x, z, "Goal", false);
+		goalLocations[2] = new Vector2(z,x);
 		
 		z = zLength*2/3 + 1;
 		setTerrainBlock(x, z, "Goal", false);
+		goalLocations[3] = new Vector2(z,x);
 		
 		x = xLength/3 - 1;
 		setTerrainBlock(x, z, "Goal", false);
+		goalLocations[4] = new Vector2(z,x);
 	}
 
 	void addFeatures()
@@ -340,6 +357,7 @@ public class MakeGround : MonoBehaviour {
 		t.defenseBonus = defenseBonus[type];
 		t.zValue = z;
 		t.xValue = x;
+		t.height = BLcorner.y + grid[z,x].transform.localScale.y/2;
 		
 		tmp.renderer.material = Resources.Load(materials[type], typeof(Material)) as Material;
 		
@@ -347,9 +365,13 @@ public class MakeGround : MonoBehaviour {
 		{
 			setTerrainBlockIfGoal(x,z);
 		}
-		if(type == "Hill" && !childFlag)
+		if(type == "Hill")
 		{
-			setTerrainBlockIfHill(x, z);	
+			t.height = t.height + hill.transform.localPosition.y/2;
+			if(!childFlag)
+			{
+				setTerrainBlockIfHill(x, z);	
+			}
 		}
 		if(type == "Rubble" && !childFlag)
 		{
