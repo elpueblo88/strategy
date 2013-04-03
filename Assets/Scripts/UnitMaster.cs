@@ -10,10 +10,10 @@ public class UnitMaster : MonoBehaviour
 	
 	public int teamSize;
 	public int radioChild;
-	public int rogues;
+	public int rogue;
 	public int bomber;
-	public int brains;
-	public int brutes;
+	public int brain;
+	public int brute;
 	
 	public GameObject[] team1;
 	public GameObject[] team2;
@@ -42,7 +42,7 @@ public class UnitMaster : MonoBehaviour
 			bomber = 1;
 		}
 		if(brain == 0){
-			brain = 1;
+			brain = 2;
 		}
 		if(brute == 0){
 			brute = teamSize - (radioChild + rogue + bomber + brain);
@@ -88,6 +88,7 @@ public class UnitMaster : MonoBehaviour
 			}else {
 				setUnit(team1[i], "brute");
 			}
+			setTeam (team1[i], 1);
 		}
 		//Debug.Log("Team1Complete");
 	}
@@ -97,7 +98,7 @@ public class UnitMaster : MonoBehaviour
 		Vector2[] start = ground.player2StartLocations;
 		Vector3 location = Vector3.zero;
 		team2 = new GameObject[teamSize];
-		for(int i = 0; i < start.Length; i++){
+		for(int i = 0; i < start.Length && i < teamSize; i++){
 			team2[i] = Instantiate(Unit) as GameObject;
 			location = ground.grid[(int)start[i].y, (int)start[i].x].transform.localPosition;
 			location.y += 5;
@@ -121,11 +122,39 @@ public class UnitMaster : MonoBehaviour
 			}else {
 				setUnit(team2[i], "brute");
 			}
+			setTeam (team2[i], 2);
 		}
 	}
 	
 	void setUnit(GameObject unit, string type){
-		
+		UnitScript u;
+		u = unit.AddComponent("UnitScript") as UnitScript;
+		u.unitType = type;
+		if(type == "radioChild"){
+			u.hp = 100;
+			u.moveSpeed = 2;
+		}
+		if(type == "rogue"){
+			u.hp = 500;
+			u.moveSpeed = 4;
+		}
+		if(type == "bomber"){
+			u.hp = 300;
+			u.moveSpeed = 4;
+		}
+		if(type == "brain"){
+			u.hp = 300;
+			u.moveSpeed = 3;
+		}
+		if(type == "brute"){
+			u.hp = 900;
+			u.moveSpeed = 2;
+		}
+	}
+	
+	void setTeam(GameObject unit, int team){
+		UnitScript u = unit.GetComponent("UnitScript") as UnitScript;
+		u.team = team;
 	}
 }
 
