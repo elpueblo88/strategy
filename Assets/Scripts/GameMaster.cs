@@ -12,6 +12,7 @@ public class GameMaster : MonoBehaviour {
 	//scripts to talk with
 	MakeGround ground;
 	GridFunction gridFunc;
+	UnitMaster units; //gdm37
 	
 	//GUI things
 	public GUIStyle bottomArea;
@@ -49,10 +50,12 @@ public class GameMaster : MonoBehaviour {
 	void actualStart()
 	{
 		ground = gameObject.GetComponent<MakeGround>();
+		units = gameObject.GetComponent<UnitMaster>(); //gdm37
 		
 		//used to set up attributes of board and then create it
 		ground.SendMessage("setTerrainAttributes");
 		ground.SendMessage("startMakeGrid");
+		units.SendMessage("teamSetup"); //gdm37
 		
 		isBattleGUIActive = false;
 	}
