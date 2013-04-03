@@ -8,11 +8,9 @@ public class GridFunction : MonoBehaviour {
 	public GameObject cameraControl;
 	
 	
-	/*
-	 * AI elements needed from Rachid
+
 	public GameObject ai;
 	AIscript aiscript;
-	*/
 
 	// Use this for initialization
 	void Start () 
@@ -23,14 +21,13 @@ public class GridFunction : MonoBehaviour {
 			cameraControl = GameObject.Find("Main Camera");	
 		}
 		
-		/*
-		 * AI stuff
+		//AI stuff
 		if(AI == null)
 		{
 			ai = GameObject.Find("GameMaster");	
 		}
 		aiscript = ai.GetComponent<aiscript>();
-		*/
+
 	}
 	
 	// Update is called once per frame
@@ -164,11 +161,11 @@ public class GridFunction : MonoBehaviour {
 	
 	/*
 	 * Functions to work with AI stuff
-	 * need name of method to store the array
+	  need name of method to store the array
+	  */
 	void sendAIStartLocations()
 	{
 		ai.SendMessage("", ground.player1StartLocations);
 		ai.SendMessage("", ground.player2StartLocations);
 	}
-	*/
 }
