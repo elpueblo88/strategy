@@ -22,6 +22,7 @@ public class Interface : MonoBehaviour {
 	}
 	
 	void OnGUI(){
+		/*
 		GUI.Box(new Rect(Screen.width*BOX_X,Screen.height*BOX_Y,Screen.width*BOX_WIDTH,Screen.height*BOX_HEIGHT), "");
 		
 		unitInfo = new float[]{1,10,2,3,1};
@@ -62,6 +63,7 @@ public class Interface : MonoBehaviour {
 		GUI.Label(new Rect(Screen.width*BOX_X,Screen.height*BOX_Y + 2*Screen.height*LABEL_HEIGHT,Screen.width*BOX_WIDTH,Screen.height*LABEL_HEIGHT),unitPower);
 		GUI.Label(new Rect(Screen.width*BOX_X,Screen.height*BOX_Y + 3*Screen.height*LABEL_HEIGHT,Screen.width*BOX_WIDTH,Screen.height*LABEL_HEIGHT),unitDefense);
 		GUI.Label(new Rect(Screen.width*BOX_X,Screen.height*BOX_Y + 4*Screen.height*LABEL_HEIGHT,Screen.width*BOX_WIDTH,Screen.height*LABEL_HEIGHT),unitMovement);
+		*/
 	}
 	
 	private void updateUnitInfo(float[] unitInfo){
