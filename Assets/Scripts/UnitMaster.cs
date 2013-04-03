@@ -73,6 +73,9 @@ public class UnitMaster : MonoBehaviour
 		
 		int[] unitTypes = {radioChild, rogue, bomber, brain, brute};
 		for(int i = 0; i < teamSize; i++){
+			UnitScript u;
+			u = team1[i].AddComponent("UnitScript") as UnitScript;
+			u.location = start[i];
 			if(unitTypes[0] > 0){
 				setUnit(team1[i], "radioChild");
 				unitTypes[0]--;
@@ -107,6 +110,9 @@ public class UnitMaster : MonoBehaviour
 		
 		int[] unitTypes = {radioChild, rogue, bomber, brain, brute};
 		for(int i = 0; i < teamSize; i++){
+			UnitScript u;
+			u = team2[i].AddComponent("UnitScript") as UnitScript;
+			u.location = start[i];
 			if(unitTypes[0] > 0){
 				setUnit(team2[i], "radioChild");
 				unitTypes[0]--;
@@ -128,7 +134,7 @@ public class UnitMaster : MonoBehaviour
 	
 	void setUnit(GameObject unit, string type){
 		UnitScript u;
-		u = unit.AddComponent("UnitScript") as UnitScript;
+		u = unit.GetComponent("UnitScript") as UnitScript;
 		u.unitType = type;
 		if(type == "radioChild"){
 			u.hp = 100;

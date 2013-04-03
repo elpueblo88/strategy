@@ -8,6 +8,7 @@ public class TerrainScript : MonoBehaviour {
 	public bool isAccessible;
 	public int defenseBonus;
 	public float height;
+	public bool occupied;
 	
 	//terrain grid is of form grid[z,x]
 	public int zValue;
@@ -32,5 +33,10 @@ public class TerrainScript : MonoBehaviour {
 	{
 		PlayerMovement playMove = new PlayerMovement(xValue, zValue, 4, 1);
 		gameMaster.SendMessage("changeGroundColorMaster", playMove);
+	}
+	
+	void switchOccupied()
+	{
+		occupied = !occupied;	
 	}
 }

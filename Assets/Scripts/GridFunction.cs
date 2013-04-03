@@ -2,31 +2,38 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// Functions that the grid can do
+/// </summary>
 public class GridFunction : MonoBehaviour {
 	
 	MakeGround ground;
 	public GameObject cameraControl;
+	GameMaster gMaster;
 	
-	
-
+	//gets ai
 	public GameObject ai;
-	AIscript aiscript;
+	//AIscript aiscript;
 
 	// Use this for initialization
 	void Start () 
 	{
+		//gets ground script from MakeGround and it's values
 		ground = gameObject.GetComponent<MakeGround>();
+		gMaster = gameObject.GetComponent<GameMaster>();
 		if(cameraControl == null)
 		{
 			cameraControl = GameObject.Find("Main Camera");	
 		}
 		
 		//AI stuff
+		/*
 		if(AI == null)
 		{
 			ai = GameObject.Find("GameMaster");	
 		}
 		aiscript = ai.GetComponent<aiscript>();
+		*/
 
 	}
 	
@@ -36,6 +43,7 @@ public class GridFunction : MonoBehaviour {
 			
 	}
 	
+	//changes color of ground for a given position and color
 	void changeGroundColor(int x, int z, Color color)
 	{
 		ground.grid[z,x].renderer.material.color = color;
@@ -46,8 +54,10 @@ public class GridFunction : MonoBehaviour {
 		}
 	}
 	
-	void colorGroundFromUnit(PlayerMovement playMove)
+	//given a playerMovement object, it finds where the player can go and changes color
+	public LinkedList<Vector2> colorGroundFromUnit(PlayerMovement playMove)
 	{
+		//picks color for different players
 		Color color = Color.white;
 		if(playMove.player == 1)
 		{
@@ -62,29 +72,27 @@ public class GridFunction : MonoBehaviour {
 			color = Color.white;	
 		}
 		
-		LinkedList<Vector2> list = getMoveableSpots(playMove.x, playMove.z, playMove.moves);
+		//makes a list of places a unit can move
+		LinkedList<Vector2> list = getMoveableSpots(playMove.x, playMove.z, playMove.moves);		
 		
-		/*
-		 * currently not used method of going through linkedlist
-		LinkedListNode<Vector2> node = list.First;
-		while(node != null)
+		//if it's the AI send it the list
+		if(gMaster.currentPlayer == 2 && gMaster.isEnemyAI)
 		{
-			System.Console.WriteLine(node.Value.x + " " + node.Value.y);
-			changeGroundColor((int)node.Value.x, (int)node.Value.y, color);
-			node = node.Next;
+			return list;
 		}
-		*/
-		
-		
-		foreach(Vector2 node in list)
+		else
 		{
-			System.Console.WriteLine(node.x + " " + node.y);
-			changeGroundColor((int)node.x, (int)node.y, color);
+			//if a person change the color of the ground it can move to
+			foreach(Vector2 node in list)
+			{
+				System.Console.WriteLine(node.x + " " + node.y);
+				changeGroundColor((int)node.x, (int)node.y, color);
+			}
+			return list;
 		}
-		
-		
 	}
 	
+	//wrapper method to start the breadth first seach
 	LinkedList<Vector2> getMoveableSpots(int x, int z, int moves)
 	{
 		LinkedList<Vector2> list = new LinkedList<Vector2>();
@@ -92,16 +100,19 @@ public class GridFunction : MonoBehaviour {
 		return list;
 	}
 	
+	//breadth first search for obtainable spots
 	void testIndividualSpots(ref LinkedList<Vector2> list, int x, int z, int moves)
 	{		
 		int location = 0;
 		
+		//makes sure the spot is non occupied and accessible
 		TerrainScript t = ground.grid[z,x].GetComponent("TerrainScript") as TerrainScript;
-		if(!t.isAccessible)
+		if(!t.isAccessible && !t.occupied)
 		{
 			return;	
 		}
-			
+		
+		//add spot if its good
 		if(list.Contains(new Vector2(x,z)) != true)
 		{
 			list.AddLast(new Vector2(x,z));
@@ -159,13 +170,4 @@ public class GridFunction : MonoBehaviour {
 		cameraControl.SendMessage("getCorners", groundCorners);
 	}
 	
-	/*
-	 * Functions to work with AI stuff
-	  need name of method to store the array
-	  */
-	void sendAIStartLocations()
-	{
-		ai.SendMessage("", ground.player1StartLocations);
-		ai.SendMessage("", ground.player2StartLocations);
-	}
 }

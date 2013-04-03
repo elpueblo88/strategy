@@ -1,25 +1,40 @@
 using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Camera control.
+/// Controls and creation of the camera
+/// </summary>
 public class CameraControl : MonoBehaviour {
 	
+	/// <summary>
+	/// The x position start.
+	/// The y position start.
+	/// The z position start.
+	/// </summary>
 	public float xPosStart;
 	public float yPosStart;
 	public float zPosStart;
 	
+	//amount camera is rotated
 	public float xRot;
 	
+	//movement speed of camera
 	public float xSpeed;
 	public float zSpeed;
 	
+	//object holding camera at an angle
 	GameObject cameraBox;
+	//gamemaster object
 	GameObject GameMaster;
 	
+	//limit to camera movement
 	float xMin;
 	float xMax;
 	float zMin;
 	float zMax;
 	
+	//variations to camera limits
 	public float xMinExtra;
 	public float xMaxExtra;
 	public float zMinExtra;
@@ -56,6 +71,7 @@ public class CameraControl : MonoBehaviour {
 			zSpeed = 10;	
 		}
 		
+		//put camera in a box that is rotated
 		cameraBox = new GameObject();
 		cameraBox.name = "CameraBox";
 		cameraBox.transform.position = new Vector3(xPosStart, yPosStart, zPosStart);
@@ -75,6 +91,7 @@ public class CameraControl : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
+		//move camera
 		if(Input.GetButton("CamRight") && cameraBox.transform.localPosition.x < xMax + xMaxExtra)
 		{
 			cameraBox.transform.Translate(Time.deltaTime * xSpeed, 0, 0);
@@ -96,6 +113,7 @@ public class CameraControl : MonoBehaviour {
 		}
 	}
 	
+	//gets corners for camera movement limits
 	void getCorners(Vector3[] corners)
 	{
 		xMin = corners[0].x;

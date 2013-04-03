@@ -1,12 +1,18 @@
 using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Game master.
+/// Does game starting and some message brokering
+/// </summary>
 public class GameMaster : MonoBehaviour {
 	
-	int currentPlayer = 1;
+	//keepts track of current player and last movement
+	public int currentPlayer = 1;
 	PlayerMovement lastPlayMove = null;
 	
-	bool isEnemyAI = false;
+	//keeps track of if the enemey
+	public bool isEnemyAI = true;
 	
 	
 	//scripts to talk with
@@ -20,15 +26,7 @@ public class GameMaster : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
-		/*
-		ground = gameObject.GetComponent<MakeGround>();
-		
-		//used to set up attributes of board and then create it
-		ground.SendMessage("setTerrainAttributes");
-		ground.SendMessage("startMakeGrid");
-		
-		isBattleGUIActive = false;
-		*/
+
 	}
 	
 	// Update is called once per frame
@@ -36,6 +34,7 @@ public class GameMaster : MonoBehaviour {
 	{
 		if(lastPlayMove != null)
 		{
+			//checks if the right mouse has been clicked to remove movable color
 			if (Input.GetMouseButtonDown(1))
 			{
 				//isBattleGUIActive = false;
@@ -46,9 +45,12 @@ public class GameMaster : MonoBehaviour {
 		}
 	}
 	
+	//method to actually set evertyhing up
 	void actualStart()
 	{
+		//gets the ground
 		ground = gameObject.GetComponent<MakeGround>();
+		gridFunc = gameObject.GetComponent<GridFunction>();
 		
 		//used to set up attributes of board and then create it
 		ground.SendMessage("setTerrainAttributes");
@@ -57,35 +59,55 @@ public class GameMaster : MonoBehaviour {
 		isBattleGUIActive = false;
 	}
 	
+	//used to send corners of the grid to the camera
 	void sendBoardCorners()
 	{
 		this.actualStart();
 		this.SendMessage("returnBoardCorners");	
 	}
 	
-	void changeGroundColorMaster(PlayerMovement play)
+	//will call gridFunction to change ground color to show movemnt allowed
+	public LinkedList<Vector2> changeGroundColorMaster(PlayerMovement play)
 	{		
+		//removes last showed movement
 		if(lastPlayMove != null)
 		{
 			lastPlayMove.player = 3;
 			this.SendMessage("colorGroundFromUnit", lastPlayMove);
 		}
 		
-		this.SendMessage("colorGroundFromUnit", play);
+		return gridFunc.colorGroundFromUnit(play);
+		//this.SendMessage("colorGroundFromUnit", play);
 		lastPlayMove = play;
 	}
 	
 	//Message Center
-	void getStartLocations()
+
+	//changes from player 1 to 2
+	void changeFromPlayerOne()
 	{
-		gridFunc.SendMessage("sendAIStartLocations");
+		if(currentPlayer == 1)
+		{
+			currentPlayer = 2;	
+		}
 	}
 	
+	//changes from player 2 to 1
+	void changeFromPlayerTwo()
+	{
+		if(currentPlayer == 2)
+		{
+			currentPlayer = 1;	
+		}
+	}
+	
+	//used to switch if battle gui is up
 	void changeBattleGUIActive(bool newValue)
 	{
 			isBattleGUIActive = newValue;
 	}
 	
+	//used to display gui
 	void OnGUI()
 	{
 		if(isBattleGUIActive)
