@@ -2,10 +2,11 @@ using UnityEngine;
 using System.Collections;
 
 public class GameMaster : MonoBehaviour {
+	public const string TAG = "GameMaster";
 	
 	int currentPlayer = 1;
 	PlayerMovement lastPlayMove = null;
-	
+
 	bool isBattleGUIActive;
 	
 	MakeGround ground;
@@ -71,5 +72,5 @@ public class GameMaster : MonoBehaviour {
 		}
 	}
 	
-	
+		
 }
