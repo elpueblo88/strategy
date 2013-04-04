@@ -123,6 +123,7 @@ public class GridFunction : MonoBehaviour {
 			return;	
 		}
 			
+		//adds more things to list to check if they are good spots
 		if(x > 0)
 		{
 			t = ground.grid[z,x-1].GetComponent("TerrainScript") as TerrainScript;
@@ -160,6 +161,7 @@ public class GridFunction : MonoBehaviour {
 		}
 	}
 	
+	//returns location of bottom left and top right corners
 	void returnBoardCorners()
 	{
 		this.Start();

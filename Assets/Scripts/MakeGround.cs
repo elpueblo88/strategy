@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+//	Makes the ground and stores all of the information about the board intself
+/// Author Daniel Pfeffer dnp19
 public class MakeGround : MonoBehaviour {
 	
 	/* Terrain Types
@@ -13,6 +15,7 @@ public class MakeGround : MonoBehaviour {
 	 * Forest: Forest
 	*/
 	
+	//gets board length and makes gameobjects for the different terrain features
 	public int xLength;
 	public int zLength;
 	public Vector3 BLcorner;
@@ -41,11 +44,13 @@ public class MakeGround : MonoBehaviour {
 	int rubblesD = 10;
 	int forestsD = 10;
 	
+	//makes grid and terrain script for the individual terrains
 	public GameObject[,] grid;
 	public float xSize;
 	public float zSize;
 	TerrainScript terrainScript;
 	
+	//values for the terrain attributes
 	public int mCostDefault;
 	public int mCostStart;
 	public int mCostGoal;
@@ -67,6 +72,7 @@ public class MakeGround : MonoBehaviour {
 	public int defenseBonusForest;
 	public int defenseBonusRubble;
 	
+	//stores values for the terrains based off of their types
 	public Dictionary<string,int> mCost = new Dictionary<string,int>();
 	public Dictionary<string,bool> isAccessible = new Dictionary<string,bool>();
 	public Dictionary<string,int> defenseBonus = new Dictionary<string,int>();
@@ -84,6 +90,7 @@ public class MakeGround : MonoBehaviour {
 		
 	}
 	
+	//sets default values for terrain attribute if none exist
 	void setTerrainAttributes()
 	{
 		if(mCostDefault == 0)
@@ -136,6 +143,7 @@ public class MakeGround : MonoBehaviour {
 		materials["Rubble"] = "Materials/Rubble";
 	}
 	
+	//sets lots of default values
 	void startMakeGrid()
 	{
 		if(xLength == 0)
@@ -201,6 +209,7 @@ public class MakeGround : MonoBehaviour {
 		modifyGrid();
 	}
 	
+	//actually makes the base of the grid
 	void makeGrid()
 	{
 		int i, j;
@@ -216,24 +225,29 @@ public class MakeGround : MonoBehaviour {
 				spot.y = BLcorner.y;
 				grid[i,j].transform.localPosition = spot;
 				
+				//sets every tile as default
 				setTerrainBlock(j, i, "Default", false);
 			}
 		}
 	}
 	
+	//starts adding features to grid
 	void modifyGrid()
 	{
 		startModifyGrid();
 		addFeatures();
 	}
 	
+	//actually adds features to grid
 	void startModifyGrid()
 	{
 		int i, j;
 		Component temp;
 		
+		//makes the goal spots
 		makeGoalSpots();
 		
+		//makes the player 1 starting area
 		int zStart = (zLength/2) - (zStartSize/2);
 		for(i = zStart; i < zStart + zStartSize; i++)
 		{
@@ -245,6 +259,7 @@ public class MakeGround : MonoBehaviour {
 			}
 		}
 		
+		//makes player 2 starting area
 		for(i = zStart; i < zStart + zStartSize; i++)
 		{
 			for(j = xLength - 1; j + xStartSize > xLength - 1; j--)
@@ -256,8 +271,11 @@ public class MakeGround : MonoBehaviour {
 		}
 	}
 	
+	//method to make goal spots 
 	void makeGoalSpots()
 	{
+		//puts one in direct center and others around it
+		//as corners to sqare that take up a third of the length and height
 		int x, z;
 		z = zLength/2;
 		x = xLength/2;
@@ -281,7 +299,8 @@ public class MakeGround : MonoBehaviour {
 		setTerrainBlock(x, z, "Goal", false);
 		goalLocations[4] = new Vector2(z,x);
 	}
-
+	
+	//goes through and adds hills, rubbles and forests in random spots based off of amount given to make
 	void addFeatures()
 	{
 		int xRand, zRand;
@@ -290,6 +309,7 @@ public class MakeGround : MonoBehaviour {
 		
 		hillsLeft = hills;
 		
+		//picks a random spot and adds hilss until they are all gone
 		while(hillsLeft > 0)
 		{
 			xRand = Random.Range(0, xLength - 1);
@@ -303,6 +323,7 @@ public class MakeGround : MonoBehaviour {
 			}
 		}
 		
+		//adds rubble until they are all made
 		rubblesLeft = rubbles;
 		GameObject rubblesClone;
 		while(rubblesLeft > 0)
@@ -318,6 +339,7 @@ public class MakeGround : MonoBehaviour {
 			}			
 		}
 		
+		//adds forests until they are all made
 		forestsLeft = forests;
 		while(forestsLeft > 0)
 		{
@@ -335,12 +357,14 @@ public class MakeGround : MonoBehaviour {
 	}	
 	
 	//childFlag lets the function know if this is for the child of a terrain block if true
+	//method that makes a terrain object at a given location into different terrain types
 	void setTerrainBlock(int x, int z, string type, bool childFlag, GameObject child = null)
 	{
 		TerrainScript t;
 		
 		GameObject tmp;
 		
+		//tmp is child if the thing to modify is not the grid location but a child on it
 		tmp = childFlag ? child : grid[z,x];
 		
 
@@ -351,6 +375,7 @@ public class MakeGround : MonoBehaviour {
 			t = tmp.gameObject.AddComponent("TerrainScript") as TerrainScript;	
 		}
 		
+		//modifies attributes of the terrain
 		t.terrainType = type;
 		t.movementCost = mCost[type];
 		t.isAccessible = isAccessible[type];
@@ -358,9 +383,13 @@ public class MakeGround : MonoBehaviour {
 		t.zValue = z;
 		t.xValue = x;
 		t.height = BLcorner.y + grid[z,x].transform.localScale.y/2;
+		t.taken = 0;
+		t.occupied = false;
 		
 		tmp.renderer.material = Resources.Load(materials[type], typeof(Material)) as Material;
 		
+		//do different things for goals, hills and rubble
+		//sets attributes of children or radioactive stuff
 		if(type == "Goal")
 		{
 			setTerrainBlockIfGoal(x,z);
@@ -379,6 +408,7 @@ public class MakeGround : MonoBehaviour {
 		}
 	}
 	
+	//makes particle system for goal spot
 	void setTerrainBlockIfGoal(int x, int z)
 	{
 		Component temp;	
@@ -387,6 +417,7 @@ public class MakeGround : MonoBehaviour {
 		temp.particleSystem.startLifetime = 3;
 	}
 	
+	//adds hill for a hill
 	void setTerrainBlockIfHill(int x, int z)
 	{
 		GameObject hillClone = Instantiate(hill) as GameObject;
@@ -395,6 +426,7 @@ public class MakeGround : MonoBehaviour {
 		setTerrainBlock(x, z, "Hill", true, hillClone);
 	}
 	
+	//adds rubble parts for the rubble
 	void setTerrainBlockIfRubble(int x, int z)
 	{
 		GameObject rubblesClone;

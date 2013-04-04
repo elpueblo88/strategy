@@ -1,19 +1,24 @@
 using UnityEngine;
 using System.Collections;
 
+//stores information about each tile on the grid
+/// Author Daniel Pfeffer dnp19
 public class TerrainScript : MonoBehaviour {
 	
+	//basic grid info
 	public string terrainType;
 	public int movementCost;
 	public bool isAccessible;
 	public int defenseBonus;
 	public float height;
 	public bool occupied;
+	public int taken;
 	
 	//terrain grid is of form grid[z,x]
 	public int zValue;
 	public int xValue;
 	
+	//can send GameMaster inforamtion
 	public GameObject gameMaster;
 
 	// Use this for initialization
@@ -35,6 +40,7 @@ public class TerrainScript : MonoBehaviour {
 		gameMaster.SendMessage("changeGroundColorMaster", playMove);
 	}
 	
+	//switches occupied state of tile
 	void switchOccupied()
 	{
 		occupied = !occupied;	

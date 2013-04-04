@@ -5,6 +5,7 @@ using System.Collections;
 /// Camera control.
 /// Controls and creation of the camera
 /// </summary>
+/// Author Daniel Pfeffer dnp19
 public class CameraControl : MonoBehaviour {
 	
 	/// <summary>
