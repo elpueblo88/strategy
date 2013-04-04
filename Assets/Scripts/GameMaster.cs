@@ -94,6 +94,7 @@ public class GameMaster : MonoBehaviour {
 		if(currentPlayer == 1)
 		{
 			currentPlayer = 2;	
+			this.gameObject.SendMessage("runAI");
 		}
 	}
 	
@@ -112,6 +113,9 @@ public class GameMaster : MonoBehaviour {
 			isBattleGUIActive = newValue;
 	}
 	
+	
+	// rxl244: This code was replaced by the interface script
+	/* 
 	//used to display gui
 	void OnGUI()
 	{
@@ -124,6 +128,6 @@ public class GameMaster : MonoBehaviour {
 			GUI.EndGroup();
 		}
 	}
-	
+	*/
 	
 }

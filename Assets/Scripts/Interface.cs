@@ -2,18 +2,23 @@ using UnityEngine;
 using System.Collections;
 
 public class Interface : MonoBehaviour {
-	private const float BOX_X = .50f;
-	private const float BOX_Y = .80f;
-	private const float BOX_WIDTH = .50f;
-	private const float BOX_HEIGHT = .20f;
+	private const float BOX_X = .80f;
+	private const float BOX_Y = .60f;
+	private const float BOX_WIDTH = .20f;
+	private const float BOX_HEIGHT = .40f;
 	
 	private const float LABEL_HEIGHT = .04f;
+	private const float BUTTON_HEIGHT = .10f;
+	
+	private const float HELP_BOX_X = .95f;
+	private const float HELP_BOX_Y = .05f;
+	private const float HELP_BOX_WIDTH = .05f;
+	private const float HELP_BOX_HEIGHT = .05f;
 	
 	//private float[] unitInfo;
 	
 	// Use this for initialization
 	void Start () {
-	
 	}
 	
 	// Update is called once per frame
@@ -22,9 +27,9 @@ public class Interface : MonoBehaviour {
 	}
 	
 	void OnGUI(){
-		/*
-		GUI.Box(new Rect(Screen.width*BOX_X,Screen.height*BOX_Y,Screen.width*BOX_WIDTH,Screen.height*BOX_HEIGHT), "");
 		
+		GUI.Box(new Rect(Screen.width*BOX_X,Screen.height*BOX_Y,Screen.width*BOX_WIDTH,Screen.height*BOX_HEIGHT), "");
+		/*
 		unitInfo = new float[]{1,10,2,3,1};
 		
 		string unitName = "";
@@ -64,6 +69,10 @@ public class Interface : MonoBehaviour {
 		GUI.Label(new Rect(Screen.width*BOX_X,Screen.height*BOX_Y + 3*Screen.height*LABEL_HEIGHT,Screen.width*BOX_WIDTH,Screen.height*LABEL_HEIGHT),unitDefense);
 		GUI.Label(new Rect(Screen.width*BOX_X,Screen.height*BOX_Y + 4*Screen.height*LABEL_HEIGHT,Screen.width*BOX_WIDTH,Screen.height*LABEL_HEIGHT),unitMovement);
 		*/
+		
+		if(GUI.Button(new Rect(Screen.width*BOX_X,Screen.height*BOX_Y + Screen.height*(BOX_HEIGHT - BUTTON_HEIGHT),Screen.width*BOX_WIDTH,Screen.height*BUTTON_HEIGHT),"End Turn")){
+			this.gameObject.SendMessage("changeFromPlayerOne");
+		}
 	}
 	
 	private void updateUnitInfo(float[] unitInfo){

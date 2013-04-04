@@ -22,8 +22,6 @@ public class AIMaster : MonoBehaviour {
 	
 	private void runAI(){
 		if(gameMaster != null){
-			gameMaster.SendMessage("getTeam2");
-			
 			this.team2 = gameMaster.GetComponent<UnitMaster>().team2;	
 		
 			foreach(GameObject unit in team2){
@@ -104,6 +102,8 @@ public class AIMaster : MonoBehaviour {
 			gameMaster = GameObject.Find("GameMaster");
 			runAI ();
 		}
+		
+		this.gameObject.SendMessage("changeFromPlayerTwo");
 	}
 	
 	private Vector2 findTarget(string targetType){
