@@ -96,18 +96,18 @@ public class GridFunction : MonoBehaviour {
 	LinkedList<Vector2> getMoveableSpots(int x, int z, int moves)
 	{
 		LinkedList<Vector2> list = new LinkedList<Vector2>();
-		testIndividualSpots(ref list, x, z, moves);
+		testIndividualSpots(ref list, x, z, moves, true);
 		return list;
 	}
 	
 	//breadth first search for obtainable spots
-	void testIndividualSpots(ref LinkedList<Vector2> list, int x, int z, int moves)
+	void testIndividualSpots(ref LinkedList<Vector2> list, int x, int z, int moves, bool origin)
 	{		
 		int location = 0;
 		
 		//makes sure the spot is non occupied and accessible
 		TerrainScript t = ground.grid[z,x].GetComponent("TerrainScript") as TerrainScript;
-		if(!t.isAccessible && !t.occupied)
+		if((!t.isAccessible || t.occupied) && !origin)
 		{
 			return;	
 		}
@@ -129,7 +129,7 @@ public class GridFunction : MonoBehaviour {
 			t = ground.grid[z,x-1].GetComponent("TerrainScript") as TerrainScript;
 			if(t.isAccessible)
 			{
-				testIndividualSpots(ref list, x - 1, z, moves - t.movementCost);
+				testIndividualSpots(ref list, x - 1, z, moves - t.movementCost, false);
 			}
 		}
 		
@@ -138,7 +138,7 @@ public class GridFunction : MonoBehaviour {
 			t = ground.grid[z,x+1].GetComponent("TerrainScript") as TerrainScript;
 			if(t.isAccessible)
 			{
-				testIndividualSpots(ref list, x + 1, z, moves - t.movementCost);
+				testIndividualSpots(ref list, x + 1, z, moves - t.movementCost, false);
 			}
 		}
 		
@@ -147,7 +147,7 @@ public class GridFunction : MonoBehaviour {
 			t = ground.grid[z+1,x].GetComponent("TerrainScript") as TerrainScript;
 			if(t.isAccessible)
 			{
-				testIndividualSpots(ref list, x, z + 1, moves - t.movementCost);
+				testIndividualSpots(ref list, x, z + 1, moves - t.movementCost, false);
 			}
 		}
 		
@@ -156,7 +156,7 @@ public class GridFunction : MonoBehaviour {
 			t = ground.grid[z-1,x].GetComponent("TerrainScript") as TerrainScript;
 			if(t.isAccessible)
 			{
-				testIndividualSpots(ref list, x, z - 1, moves - t.movementCost);
+				testIndividualSpots(ref list, x, z - 1, moves - t.movementCost, false);
 			}
 		}
 	}

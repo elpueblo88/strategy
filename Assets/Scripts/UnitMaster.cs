@@ -4,6 +4,7 @@ using System.Collections;
 public class UnitMaster : MonoBehaviour
 {
 	MakeGround ground;
+	TerrainScript terrain;
 	
 	public GameObject Brute;
 	public GameObject RadioChild;
@@ -88,6 +89,8 @@ public class UnitMaster : MonoBehaviour
 		if(teamSize < start.Length)
 			loopMax = teamSize;
 		for(int i = (loopMax - 1); i >= 0 ; i--){
+			terrain = ground.grid[(int)start[i].y, (int)start[i].x].GetComponent<TerrainScript>();
+			terrain.SendMessage("switchOccupied");
 			location = ground.grid[(int)start[i].y, (int)start[i].x].transform.localPosition;
 			location.y += 5;
 			UnitScript u;
