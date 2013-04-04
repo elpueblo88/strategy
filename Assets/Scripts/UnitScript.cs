@@ -12,11 +12,6 @@ public class UnitScript : MonoBehaviour
 	public int team;
 	public Vector2 location;
 	
-	public GameObject Brute;
-	public GameObject RadioChild;
-	public GameObject Rogue;
-	public GameObject Brain;
-	public GameObject Bomber;
 	public GameObject gameMaster;
 	
 	Color storeColor;

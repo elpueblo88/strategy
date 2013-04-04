@@ -84,7 +84,10 @@ public class UnitMaster : MonoBehaviour
 		team1 = new GameObject[teamSize];
 		int[] unitTypes = {radioChild, rogue, bomber, brain, brute};
 		
-		for(int i = 0; i < start.Length && i < teamSize; i++){
+		int loopMax = start.Length;
+		if(teamSize < start.Length)
+			loopMax = teamSize;
+		for(int i = (loopMax - 1); i >= 0 ; i--){
 			location = ground.grid[(int)start[i].y, (int)start[i].x].transform.localPosition;
 			location.y += 5;
 			UnitScript u;
