@@ -95,9 +95,14 @@ public class GameMaster : MonoBehaviour {
 
 	//changes from player 1 to 2
 	void changeFromPlayerOne()
-	{
+	{		
 		if(currentPlayer == 1)
 		{
+			// rxl244: resets "alreadyMoved" attribute to false so units can move again
+			foreach(GameObject unit in units.team2){
+				unit.SendMessage("resetMoveLimit");
+			}
+			
 			// rxl244: tell the interface to clear itself, then run the ai script
 			this.gameObject.SendMessage("cancelInfo");
 			currentPlayer = 2;	
@@ -110,6 +115,10 @@ public class GameMaster : MonoBehaviour {
 	{
 		if(currentPlayer == 2)
 		{
+			// rxl244: resets "alreadyMoved" attribute to false so units can move again
+			foreach(GameObject unit in units.team1){
+				unit.SendMessage("resetMoveLimit");
+			}
 			currentPlayer = 1;	
 		}
 	}

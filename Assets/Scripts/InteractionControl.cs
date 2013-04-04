@@ -56,6 +56,7 @@ public class InteractionControl : MonoBehaviour {
 				viableFlag = true;
 		}
 		if(viableFlag){
+			// rxl244: if statement prevents player from moving enemy units
 			if(unit.team != 2){
 				unit.SendMessage("moveTo", destination);
 			}

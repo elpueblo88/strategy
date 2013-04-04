@@ -14,6 +14,9 @@ public class UnitScript : MonoBehaviour
 	public int team;
 	public Vector2 location;
 	
+	//rxl244: prevents units from moving twice per turn
+	private bool alreadyMoved = false;
+	
 	public GameObject gameMaster;
 	
 	Color storeColor;
@@ -48,11 +51,15 @@ public class UnitScript : MonoBehaviour
 	}
 	
 	void OnMouseDown(){
-		storeColor = gameObject.renderer.material.color;
-		gameObject.renderer.material.color = Color.white;
-		terrain = ground.grid[(int)location.y, (int)location.x].GetComponent<TerrainScript>();
-		terrain.SendMessage("UnitSelected", gameObject);
-		interaction.SendMessage("NewUnitSelected", gameObject);
+		
+		// rxl244: added if statement to prevent this unit from looking like it can move when it may not be able to
+		if(!alreadyMoved){
+			storeColor = gameObject.renderer.material.color;
+			gameObject.renderer.material.color = Color.white;
+			terrain = ground.grid[(int)location.y, (int)location.x].GetComponent<TerrainScript>();
+			terrain.SendMessage("UnitSelected", gameObject);
+			interaction.SendMessage("NewUnitSelected", gameObject);
+		}
 		
 		// rxl244: update interface when unit is clicked on
 		gameMaster.SendMessage("updateUnitInfo",new float[]{this.hp,this.atkPower,this.moveSpeed,this.team});
@@ -63,16 +70,25 @@ public class UnitScript : MonoBehaviour
 	}
 	
 	public void moveTo (Vector2 spot){
+		// rxl244: prevent unit from moving twice
+		if(alreadyMoved){
+			return;	
+		}else{
+			alreadyMoved = true;	
+		}
 		terrain = ground.grid[(int)spot.y, (int)spot.x].GetComponent<TerrainScript>();
-		//terrain.SendMessage("switchOccupied");
-		terrain.switchOccupied();
+		terrain.SendMessage("switchOccupied");
 		terrain = ground.grid[(int)spot.y, (int)spot.x].GetComponent<TerrainScript>();
-		//terrain.SendMessage("switchOccupied");
-		terrain.switchOccupied();
+		terrain.SendMessage("switchOccupied");
 		Vector3 destination = ground.grid[(int)spot.y, (int)spot.x].transform.localPosition;
 		destination.y += 5;
 		location = spot;
 		gameObject.transform.localPosition = destination;
+	}
+	
+	// rxl244: call through send message allow the unit to move again
+	private void resetMoveLimit(){
+		alreadyMoved = false;	
 	}
 }
 
