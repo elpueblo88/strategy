@@ -26,18 +26,19 @@ public class UnitScript : MonoBehaviour
 	{
 		gameMaster = GameObject.FindGameObjectWithTag("GameMaster");
 		ground = gameMaster.GetComponent<MakeGround>();
-		if(team == 1){
-			gameObject.renderer.material.color = Color.magenta;
-		}
-		if(team == 2){
-			gameObject.renderer.material.color = Color.yellow;
-		}
+		
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
-		
+		//ground.grid[(int)location.y, (int)location.x].renderer.material.color = 
+		if(team == 1){
+			ground.grid[(int)location.y, (int)location.x].renderer.material.color = Color.magenta;
+		}
+		if(team == 2){
+			ground.grid[(int)location.y, (int)location.x].renderer.material.color = Color.yellow;
+		}
 		
 	}
 	
