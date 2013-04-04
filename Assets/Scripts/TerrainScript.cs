@@ -63,4 +63,10 @@ public class TerrainScript : MonoBehaviour {
 			interaction.SendMessage("NewDestinationChosen", location);
 		}
 	}
+	
+	// rxl244: update interface to view terrain info
+	void OnMouseDown(){
+		gameMaster.SendMessage("updateTerrainInfo", new float[]{movementCost});
+		gameMaster.SendMessage("updateName",this.terrainType);
+	}
 }

@@ -14,9 +14,9 @@ public class Interface : MonoBehaviour {
 	private const float HELP_BOX1_WIDTH = .05f;
 	private const float HELP_BOX1_HEIGHT = .05f;
 	
-	private const float HELP_BOX2_X = BOX_X;
+	private const float HELP_BOX2_X = .50f;
 	private const float HELP_BOX2_Y = 0;
-	private const float HELP_BOX2_WIDTH = BOX_WIDTH;
+	private const float HELP_BOX2_WIDTH = .50f;
 	private const float HELP_BOX2_HEIGHT = BOX_Y;
 	
 	private string[] HELP_LABELS ={
@@ -30,9 +30,8 @@ public class Interface : MonoBehaviour {
 		"h: close help",
 		"",
 		"Objective:",
-		"Use your radioactive child to capture 3",
-		"\t radioactive spots.",
-		"OR:Kill all enemy units.",
+		"Use your radioactive child to capture 3 radioactive spots.",
+		"OR: Kill all enemy units.",
 		"Tie: both radio-child units die."
 	};
 	
@@ -53,6 +52,10 @@ public class Interface : MonoBehaviour {
 		"Team: "
 	};
 	
+	private string[] TERRAIN_LABELS = new string[]{	
+		"Movement Cost: "
+	};
+	
 	private const KeyCode KEY_HELP = KeyCode.H;
 	
 	private bool displayHelp = false;
@@ -61,6 +64,9 @@ public class Interface : MonoBehaviour {
 	private float[] unitInfo;
 	private float[] terrainInfo;
 	private string selectedName = "";
+	
+	private GUIStyle titleStyle = null; 
+	private GUIStyle normalStyle = null;
 	
 	// Use this for initialization
 	void Start () {
@@ -74,11 +80,25 @@ public class Interface : MonoBehaviour {
 	}
 	
 	void OnGUI(){
+		if(titleStyle == null){
+			titleStyle = new GUIStyle();
+			titleStyle.fontStyle = FontStyle.Bold;
+			titleStyle.normal.textColor = Color.white;
+			titleStyle.fontSize = 16;
+			titleStyle.alignment = TextAnchor.UpperCenter;	
+			
+			normalStyle = new GUIStyle();
+			normalStyle.fontStyle = FontStyle.Normal;
+			normalStyle.normal.textColor = Color.white;
+			titleStyle.fontSize = 16;
+			normalStyle.alignment = TextAnchor.UpperLeft;
+		}
+		
 		if(displayHelp){
 			GUI.Box(new Rect(Screen.width*HELP_BOX2_X,Screen.height*HELP_BOX2_Y,Screen.width*HELP_BOX2_WIDTH,Screen.height*HELP_BOX2_HEIGHT),"");
 			float labelHeight = HELP_BOX2_HEIGHT/HELP_LABELS.Length;
 			for(int i = 0; i < HELP_LABELS.Length; i++){
-				GUI.Label(new Rect(Screen.width*HELP_BOX2_X,Screen.height*HELP_BOX2_Y + i*Screen.height*labelHeight,Screen.width*HELP_BOX2_WIDTH,Screen.height*labelHeight),HELP_LABELS[i]);
+				GUI.Label(new Rect(Screen.width*(HELP_BOX2_X + .01f),Screen.height*HELP_BOX2_Y + i*Screen.height*labelHeight,Screen.width*HELP_BOX2_WIDTH,Screen.height*labelHeight),HELP_LABELS[i],normalStyle);
 			}
 		}else{
 			GUI.Box(new Rect(Screen.width*HELP_BOX1_X,Screen.height*HELP_BOX1_Y,Screen.width*HELP_BOX1_WIDTH,Screen.height*HELP_BOX1_HEIGHT),"h: help");
@@ -96,58 +116,22 @@ public class Interface : MonoBehaviour {
 		case INFO_TYPE_UNIT:
 			if(unitInfo != null && unitInfo.Length > 0){
 				float labelHeight = (BOX_HEIGHT - BUTTON_HEIGHT)/(unitInfo.Length + 1);
-				GUI.Label(new Rect(Screen.width*BOX_X,Screen.height*BOX_Y,Screen.width*BOX_WIDTH,Screen.height*labelHeight),selectedName);
-				print ("" + labelHeight);
+				GUI.Label(new Rect(Screen.width*BOX_X,Screen.height*BOX_Y,Screen.width*BOX_WIDTH,Screen.height*labelHeight),selectedName,titleStyle);
 				for(int i = 0; i < unitInfo.Length; i++){
-					GUI.Label(new Rect(Screen.width*BOX_X,Screen.height*BOX_Y + Screen.height*(i+1)*labelHeight,Screen.width*BOX_WIDTH,Screen.height*labelHeight),UNIT_LABELS[i] + unitInfo[i]);
+					GUI.Label(new Rect(Screen.width*BOX_X,Screen.height*BOX_Y + Screen.height*(i+1)*labelHeight,Screen.width*BOX_WIDTH,Screen.height*labelHeight),UNIT_LABELS[i] + unitInfo[i],normalStyle);
 				}
 			}
 			break;
 		case INFO_TYPE_TERRAIN:
+			if(terrainInfo != null && terrainInfo.Length > 0){
+				float labelHeight = (BOX_HEIGHT - BUTTON_HEIGHT)/(terrainInfo.Length + 1);
+				GUI.Label(new Rect(Screen.width*BOX_X,Screen.height*BOX_Y,Screen.width*BOX_WIDTH,Screen.height*labelHeight),selectedName,titleStyle);
+				for(int i = 0; i < terrainInfo.Length; i++){
+					GUI.Label(new Rect(Screen.width*BOX_X,Screen.height*BOX_Y + Screen.height*(i+1)*labelHeight,Screen.width*BOX_WIDTH,Screen.height*labelHeight),TERRAIN_LABELS[i] + terrainInfo[i],normalStyle);
+				}
+			}
 			break;
 		}
-		/*
-		unitInfo = new float[]{1,10,2,3,1};
-		
-		string unitName = "";
-		string unitHealth = "";
-		string unitPower = "";
-		string unitDefense = "";
-		string unitMovement = "";
-		
-		if(unitInfo != null){
-			int type = (int)unitInfo[0];
-			unitHealth = "" + unitInfo[1];
-			unitPower = "" + unitInfo[2];
-			unitDefense = "" + unitInfo[3];
-			unitMovement = "" + unitInfo[4];
-			switch(type){
-			case Unit.TYPE_RADIO_CHILD:
-				unitName = "Radio Child";
-				break;
-			case Unit.TYPE_BRAIN:
-				unitName = "Brain";
-				break;
-			case Unit.TYPE_BRUTE:
-				unitName = "Brute";
-				break;
-			case Unit.TYPE_ROGUE:
-				unitName = "Rogue";
-				break;
-			case Unit.TYPE_BOMBER:
-				unitName = "Bomber";
-				break;
-			}
-		}
-		
-		GUI.Label(new Rect(Screen.width*BOX_X,Screen.height*BOX_Y,Screen.width*BOX_WIDTH,Screen.height*LABEL_HEIGHT),unitName);
-		GUI.Label(new Rect(Screen.width*BOX_X,Screen.height*BOX_Y + Screen.height*LABEL_HEIGHT,Screen.width*BOX_WIDTH,Screen.height*LABEL_HEIGHT),unitHealth);
-		GUI.Label(new Rect(Screen.width*BOX_X,Screen.height*BOX_Y + 2*Screen.height*LABEL_HEIGHT,Screen.width*BOX_WIDTH,Screen.height*LABEL_HEIGHT),unitPower);
-		GUI.Label(new Rect(Screen.width*BOX_X,Screen.height*BOX_Y + 3*Screen.height*LABEL_HEIGHT,Screen.width*BOX_WIDTH,Screen.height*LABEL_HEIGHT),unitDefense);
-		GUI.Label(new Rect(Screen.width*BOX_X,Screen.height*BOX_Y + 4*Screen.height*LABEL_HEIGHT,Screen.width*BOX_WIDTH,Screen.height*LABEL_HEIGHT),unitMovement);
-		*/
-		
-		
 	}
 	
 	private void updateUnitInfo(float[] unitInfo){
@@ -156,7 +140,14 @@ public class Interface : MonoBehaviour {
 	}
 	
 	private void updateName(string name){
-		selectedName = name;
+		if(name != "radioChild" && name != "Default"){
+			selectedName = char.ToUpper(name.ToCharArray()[0]) + name.Substring(1);	
+		}else if(name == "radioChild"){
+			selectedName = "Radio Child";	
+		}else{
+			selectedName = "Dirt";	
+		}
+		
 	}
 	
 	private void updateTerrainInfo(float[] terrainInfo){
