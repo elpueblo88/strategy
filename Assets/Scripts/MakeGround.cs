@@ -279,24 +279,29 @@ public class MakeGround : MonoBehaviour {
 		int x, z;
 		z = zLength/2;
 		x = xLength/2;
-		setTerrainBlock(x, z, "Goal", false);
+		//setTerrainBlock(x, z, "Goal", false);
+		setTerrainBlock(z, x, "Goal", false);
 		goalLocations[0] = new Vector2(z,x);
 		
-		z = zLength/3 - 2;
+		z = zLength/3;// - 2;
 		x = xLength/3 - 1;
-		setTerrainBlock(x, z, "Goal", false);
+		//setTerrainBlock(x, z, "Goal", false);
+		setTerrainBlock(z, x, "Goal", false);
 		goalLocations[1] = new Vector2(z,x);
 		
 		x = xLength*2/3;
-		setTerrainBlock(x, z, "Goal", false);
+		//setTerrainBlock(x, z, "Goal", false);
+		setTerrainBlock(z, x, "Goal", false);
 		goalLocations[2] = new Vector2(z,x);
 		
-		z = zLength*2/3 + 1;
-		setTerrainBlock(x, z, "Goal", false);
+		z = zLength*2/3 - 1;
+		//setTerrainBlock(x, z, "Goal", false);
+		setTerrainBlock(z, x, "Goal", false);
 		goalLocations[3] = new Vector2(z,x);
 		
 		x = xLength/3 - 1;
-		setTerrainBlock(x, z, "Goal", false);
+		//setTerrainBlock(x, z, "Goal", false);
+		setTerrainBlock(z, x, "Goal", false);
 		goalLocations[4] = new Vector2(z,x);
 	}
 	

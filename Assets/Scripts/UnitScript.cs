@@ -63,9 +63,12 @@ public class UnitScript : MonoBehaviour
 	}
 	
 	public void moveTo (Vector2 spot){
-		terrain.SendMessage("switchOccupied");
 		terrain = ground.grid[(int)spot.y, (int)spot.x].GetComponent<TerrainScript>();
-		terrain.SendMessage("switchOccupied");
+		//terrain.SendMessage("switchOccupied");
+		terrain.switchOccupied();
+		terrain = ground.grid[(int)spot.y, (int)spot.x].GetComponent<TerrainScript>();
+		//terrain.SendMessage("switchOccupied");
+		terrain.switchOccupied();
 		Vector3 destination = ground.grid[(int)spot.y, (int)spot.x].transform.localPosition;
 		destination.y += 5;
 		location = spot;

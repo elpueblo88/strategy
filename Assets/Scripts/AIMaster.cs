@@ -44,7 +44,8 @@ public class AIMaster : MonoBehaviour {
 					locationToCheckAgainst = unitScript.location;
 					if(unitScript.unitType == "radioChild"){
 						foreach(Vector2 goalLocation in makeGroundScript.goalLocations){
-							if(makeGroundScript.grid[(int)goalLocation.y,(int)goalLocation.x].GetComponent<TerrainScript>().taken == 0){
+							int taken = makeGroundScript.grid[(int)goalLocation.y,(int)goalLocation.x].GetComponent<TerrainScript>().taken;
+							if(taken == 0){
 								if(targetPosition.x == -1 || (Vector2.Distance(targetPosition,unitScript.location) > Vector2.Distance(unitScript.location,goalLocation))){
 									targetPosition = goalLocation;
 								}
@@ -83,6 +84,10 @@ public class AIMaster : MonoBehaviour {
 					if(targetPosition.x != -1){
 						Vector2 nextPosition = new Vector2(-1,-1);
 						foreach(Vector2 location in positionList){
+							if(unitScript.unitType == "radioChild" && location.Equals(unitScript.location)){
+								continue;
+							}
+							
 							if(nextPosition.x == -1 || (Vector2.Distance(nextPosition,targetPosition) > Vector2.Distance(location,targetPosition))){
 								nextPosition = location;
 							}
@@ -90,6 +95,10 @@ public class AIMaster : MonoBehaviour {
 						
 						if(nextPosition.x != -1){
 							unit.SendMessage("moveTo",nextPosition);
+							
+							if(unitScript.unitType == "radioChild" && nextPosition.x == targetPosition.x && nextPosition.y == targetPosition.y){
+								makeGroundScript.grid[(int)targetPosition.y,(int)targetPosition.x].GetComponent<TerrainScript>().SendMessage("setTaken",2);
+							}
 						}
 					}
 				}

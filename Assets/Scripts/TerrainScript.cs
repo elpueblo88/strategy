@@ -49,9 +49,34 @@ public class TerrainScript : MonoBehaviour {
 	}
 	
 	//switches occupied state of tile
-	void switchOccupied()
+	public void switchOccupied()
 	{
 		occupied = !occupied;	
+	}
+	
+	// rxl244: called by moving unit to claim a radioactive spot. Also checks win condition.
+	private void setTaken(int team){
+		if(this.taken > 0){
+			return;
+		}
+		
+		this.taken = team;
+		
+		MakeGround makeGroundScript = GameObject.Find("GameMaster").GetComponent<MakeGround>();
+		int takenCount = 1;
+
+		foreach(Vector2 goalLocation in makeGroundScript.goalLocations){
+			if(goalLocation.x != this.zValue && goalLocation.y != this.xValue){
+				int taken = makeGroundScript.grid[(int)goalLocation.y,(int)goalLocation.x].GetComponent<TerrainScript>().taken;	
+				if(taken == team){
+					takenCount++;
+				}
+			}
+		}
+		
+		if(takenCount >= 3){
+			gameMaster.SendMessage("winner",team);
+		}
 	}
 	
 	//gdm37::Helps handle movement by communicating with the move controller
@@ -66,7 +91,7 @@ public class TerrainScript : MonoBehaviour {
 	
 	// rxl244: update interface to view terrain info
 	void OnMouseDown(){
-		gameMaster.SendMessage("updateTerrainInfo", new float[]{movementCost});
+		gameMaster.SendMessage("updateTerrainInfo", new float[]{movementCost,taken});
 		gameMaster.SendMessage("updateName",this.terrainType);
 	}
 }

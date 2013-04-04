@@ -56,7 +56,9 @@ public class InteractionControl : MonoBehaviour {
 				viableFlag = true;
 		}
 		if(viableFlag){
-			unit.SendMessage("moveTo", destination);
+			if(unit.team != 2){
+				unit.SendMessage("moveTo", destination);
+			}
 			//reset values
 			destination = Vector2.zero;
 			mover = null;

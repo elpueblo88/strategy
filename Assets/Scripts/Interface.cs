@@ -19,6 +19,26 @@ public class Interface : MonoBehaviour {
 	private const float HELP_BOX2_WIDTH = .50f;
 	private const float HELP_BOX2_HEIGHT = BOX_Y;
 	
+	private const float WIN_BOX_X = .25f;
+	private const float WIN_BOX_Y = .25f;
+	private const float WIN_BOX_WIDTH = .5f;
+	private const float WIN_BOX_HEIGHT = .5f;
+	
+	private const float WIN_LABEL_X = .28f;
+	private const float WIN_LABEL_Y = .28f;
+	private const float WIN_LABEL_WIDTH = .44f;
+	private const float WIN_LABEL_HEIGHT = .44f;
+	
+	private const float WIN_MESSAGE_X = .28f;
+	private const float WIN_MESSAGE_Y = .5f;
+	private const float WIN_MESSAGE_WIDTH = .44f;
+	private const float WIN_MESSAGE_HEIGHT = .25f;
+
+	private const float WIN_BUTTON_X = .28f;
+	private const float WIN_BUTTON_Y = .65f;
+	private const float WIN_BUTTON_WIDTH = .44f;
+	private const float WIN_BUTTON_HEIGHT = .10f;
+	
 	private string[] HELP_LABELS ={
 		"Controls:",
 		"w,a,s,d: pan camera",
@@ -53,7 +73,8 @@ public class Interface : MonoBehaviour {
 	};
 	
 	private string[] TERRAIN_LABELS = new string[]{	
-		"Movement Cost: "
+		"Movement Cost: ",
+		"Taken: "
 	};
 	
 	private const KeyCode KEY_HELP = KeyCode.H;
@@ -67,6 +88,14 @@ public class Interface : MonoBehaviour {
 	
 	private GUIStyle titleStyle = null; 
 	private GUIStyle normalStyle = null;
+	private GUIStyle superStyle = null;
+	
+	public const int TEAM_NONE = 0;
+	public const int TEAM_PLAYER = 1;
+	public const int TEAM_AI = 2;
+	public const int TEAM_TIE = 3;
+	
+	private int winStatus = TEAM_NONE;
 	
 	// Use this for initialization
 	void Start () {
@@ -79,7 +108,7 @@ public class Interface : MonoBehaviour {
 		}
 	}
 	
-	void OnGUI(){
+	void OnGUI(){		
 		if(titleStyle == null){
 			titleStyle = new GUIStyle();
 			titleStyle.fontStyle = FontStyle.Bold;
@@ -90,8 +119,43 @@ public class Interface : MonoBehaviour {
 			normalStyle = new GUIStyle();
 			normalStyle.fontStyle = FontStyle.Normal;
 			normalStyle.normal.textColor = Color.white;
-			titleStyle.fontSize = 16;
+			normalStyle.fontSize = 16;
 			normalStyle.alignment = TextAnchor.UpperLeft;
+			
+			superStyle = new GUIStyle();
+			superStyle.fontStyle = FontStyle.Normal;
+			superStyle.normal.textColor = Color.white;
+			superStyle.fontSize = 36;
+			superStyle.alignment = TextAnchor.UpperCenter;
+		}
+		
+		if(winStatus > TEAM_NONE){
+			superStyle.normal.textColor = Color.white;
+			GUI.Box(new Rect(Screen.width*WIN_BOX_X,Screen.height*WIN_BOX_Y,Screen.width*WIN_BOX_WIDTH,Screen.height*WIN_BOX_HEIGHT),"");
+			GUI.Label(new Rect(Screen.width*WIN_LABEL_X,Screen.height*WIN_LABEL_Y,Screen.width*WIN_LABEL_WIDTH,Screen.height*WIN_LABEL_HEIGHT),"Game Over",superStyle);
+			
+			string winLabel = "";
+			switch(winStatus){
+			case TEAM_PLAYER:
+				superStyle.normal.textColor = Color.green;
+				winLabel = "Player Wins!";
+				break;
+			case TEAM_AI:
+				superStyle.normal.textColor = Color.red;
+				winLabel = "AI Wins!";
+				break;
+			case TEAM_TIE:
+				winLabel = "Draw";
+				break;
+			}
+			
+			GUI.Label(new Rect(Screen.width*WIN_MESSAGE_X,Screen.height*WIN_MESSAGE_Y,Screen.width*WIN_MESSAGE_WIDTH,Screen.height*WIN_MESSAGE_HEIGHT),winLabel,superStyle);
+			
+			if(GUI.Button(new Rect(Screen.width*WIN_BUTTON_X,Screen.height*WIN_BUTTON_Y,Screen.width*WIN_BUTTON_WIDTH,Screen.height*WIN_BUTTON_HEIGHT),"Play Again!")){
+				Application.LoadLevel(0);
+			}
+			
+			return;
 		}
 		
 		if(displayHelp){
@@ -124,7 +188,7 @@ public class Interface : MonoBehaviour {
 			break;
 		case INFO_TYPE_TERRAIN:
 			if(terrainInfo != null && terrainInfo.Length > 0){
-				float labelHeight = (BOX_HEIGHT - BUTTON_HEIGHT)/(terrainInfo.Length + 1);
+				float labelHeight = (BOX_HEIGHT - BUTTON_HEIGHT)/(terrainInfo.Length + 4);
 				GUI.Label(new Rect(Screen.width*BOX_X,Screen.height*BOX_Y,Screen.width*BOX_WIDTH,Screen.height*labelHeight),selectedName,titleStyle);
 				for(int i = 0; i < terrainInfo.Length; i++){
 					GUI.Label(new Rect(Screen.width*BOX_X,Screen.height*BOX_Y + Screen.height*(i+1)*labelHeight,Screen.width*BOX_WIDTH,Screen.height*labelHeight),TERRAIN_LABELS[i] + terrainInfo[i],normalStyle);
@@ -157,5 +221,9 @@ public class Interface : MonoBehaviour {
 	
 	private void cancelInfo(){
 		infoType = INFO_TYPE_NONE;
+	}
+	
+	private void winner(int team){
+		winStatus = team;
 	}
 }
