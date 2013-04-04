@@ -50,7 +50,7 @@ public class UnitScript : MonoBehaviour
 	}
 	
 	void moveTo (Vector2 spot){
-		Vector3 destination = ground.grid[spot.x,spot.y].transform.localPosition;
+		Vector3 destination = ground.grid[(int)spot.x, (int)spot.y].transform.localPosition;
 		destination.y += 5;
 		location = destination;
 	}
