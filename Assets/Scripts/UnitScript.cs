@@ -75,7 +75,7 @@ public class UnitScript : MonoBehaviour
 		}else{
 			alreadyMoved = true;	
 		}
-//		terrain = ground.grid[(int)location.y, (int)location.x].GetComponent<TerrainScript>();
+		terrain = ground.grid[(int)location.y, (int)location.x].GetComponent<TerrainScript>();
 		terrain.SendMessage("switchOccupied");
 		terrain = ground.grid[(int)spot.y, (int)spot.x].GetComponent<TerrainScript>();
 		terrain.SendMessage("switchOccupied");

@@ -100,7 +100,9 @@ public class GameMaster : MonoBehaviour {
 		{
 			// rxl244: resets "alreadyMoved" attribute to false so units can move again
 			foreach(GameObject unit in units.team2){
-				unit.SendMessage("resetMoveLimit");
+				if(unit != null){
+					unit.SendMessage("resetMoveLimit");
+				}
 			}
 			
 			// rxl244: tell the interface to clear itself, then run the ai script
@@ -117,7 +119,9 @@ public class GameMaster : MonoBehaviour {
 		{
 			// rxl244: resets "alreadyMoved" attribute to false so units can move again
 			foreach(GameObject unit in units.team1){
-				unit.SendMessage("resetMoveLimit");
+				if(unit != null){
+					unit.SendMessage("resetMoveLimit");
+				}
 			}
 			currentPlayer = 1;	
 		}
