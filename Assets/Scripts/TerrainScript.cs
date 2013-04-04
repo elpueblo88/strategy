@@ -20,11 +20,17 @@ public class TerrainScript : MonoBehaviour {
 	
 	//can send GameMaster inforamtion
 	public GameObject gameMaster;
+	
+	//gdm37::necessary for movement communication
+	InteractionControl interaction;
 
 	// Use this for initialization
 	void Start () 
 	{
 		gameMaster = GameObject.Find("GameMaster");
+		
+		//gdm37
+		interaction = gameMaster.GetComponent<InteractionControl>();
 	}
 	
 	// Update is called once per frame
@@ -34,7 +40,7 @@ public class TerrainScript : MonoBehaviour {
 	}
 	
 	//changes color of ground
-	void OnMouseDown()
+	void UnitSelected()
 	{
 		PlayerMovement playMove = new PlayerMovement(xValue, zValue, 4, 1);
 		gameMaster.SendMessage("changeGroundColorMaster", playMove);
@@ -44,5 +50,15 @@ public class TerrainScript : MonoBehaviour {
 	void switchOccupied()
 	{
 		occupied = !occupied;	
+	}
+	
+	//gdm37::Helps handle movement by communicating with the move controller
+	void OnMouseOver(){
+		if(Input.GetMouseButtonDown(1)){
+			Vector2 location;
+			location.x = xValue;
+			location.y = zValue;
+			interaction.SendMessage("NewDestinationChosen", location);
+		}
 	}
 }

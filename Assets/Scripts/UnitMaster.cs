@@ -5,7 +5,11 @@ public class UnitMaster : MonoBehaviour
 {
 	MakeGround ground;
 	
-	public GameObject Unit;
+	public GameObject Brute;
+	public GameObject RadioChild;
+	public GameObject Rogue;
+	public GameObject Brain;
+	public GameObject Bomber;
 	public GameObject GameMaster;
 	
 	public int teamSize;
@@ -48,8 +52,20 @@ public class UnitMaster : MonoBehaviour
 		if(brute == 0){
 			brute = teamSize - (radioChild + rogue + bomber + brain);
 		}
-		if (!Unit) {
-			Unit = (GameObject)Resources.Load("Unit");
+		if (!RadioChild) {
+			RadioChild = (GameObject)Resources.Load("RadioChild");
+		}
+		if (!Rogue) {
+			Rogue = (GameObject)Resources.Load("Rogue");
+		}
+		if (!Bomber) {
+			Bomber = (GameObject)Resources.Load("Bomber");
+		}
+		if (!Brain) {
+			Brain = (GameObject)Resources.Load("Brain");
+		}
+		if (!Brute) {
+			Brute = (GameObject)Resources.Load("Brute");
 		}
 	}
 	
@@ -66,34 +82,48 @@ public class UnitMaster : MonoBehaviour
 		Vector2[] start = ground.player1StartLocations;
 		Vector3 location = Vector3.zero;
 		team1 = new GameObject[teamSize];
-		for(int i = 0; i < start.Length && i < teamSize; i++){
-			team1[i] = Instantiate(Unit) as GameObject;
+		int[] unitTypes = {radioChild, rogue, bomber, brain, brute};
+		
+		int loopMax = start.Length;
+		if(teamSize < start.Length)
+			loopMax = teamSize;
+		for(int i = (loopMax - 1); i >= 0 ; i--){
 			location = ground.grid[(int)start[i].y, (int)start[i].x].transform.localPosition;
 			location.y += 5;
-			team1[i].transform.localPosition = location;
-		}
-		
-		int[] unitTypes = {radioChild, rogue, bomber, brain, brute};
-		for(int i = 0; i < teamSize; i++){
 			UnitScript u;
-			u = team1[i].AddComponent("UnitScript") as UnitScript;
-			u.location = start[i];
 			if(unitTypes[0] > 0){
+				team1[i] = Instantiate(RadioChild) as GameObject;
+				team1[i].transform.localPosition = location;
+				u = team1[i].AddComponent("UnitScript") as UnitScript;
 				setUnit(team1[i], "radioChild");
 				unitTypes[0]--;
 			}else if(unitTypes[1] > 0){
+				team1[i] = Instantiate(Rogue) as GameObject;
+				team1[i].transform.localPosition = location;
+				u = team1[i].AddComponent("UnitScript") as UnitScript;
 				setUnit(team1[i], "rogue");
 				unitTypes[1]--;
 			}else if(unitTypes[2] > 0){
+				team1[i] = Instantiate(Bomber) as GameObject;
+				team1[i].transform.localPosition = location;
+				u = team1[i].AddComponent("UnitScript") as UnitScript;
 				setUnit(team1[i], "bomber");
 				unitTypes[2]--;
 			}else if(unitTypes[3] > 0){
+				team1[i] = Instantiate(Brain) as GameObject;
+				team1[i].transform.localPosition = location;
+				u = team1[i].AddComponent("UnitScript") as UnitScript;
 				setUnit(team1[i], "brain");
 				unitTypes[3]--;
 			}else {
+				team1[i] = Instantiate(Brute) as GameObject;
+				team1[i].transform.localPosition = location;
+				u = team1[i].AddComponent("UnitScript") as UnitScript;
 				setUnit(team1[i], "brute");
 			}
+			u.location = start[i];
 			setTeam (team1[i], 1);
+			
 		}
 //		Debug.Log("Team1Complete");
 	}
@@ -103,33 +133,43 @@ public class UnitMaster : MonoBehaviour
 		Vector2[] start = ground.player2StartLocations;
 		Vector3 location = Vector3.zero;
 		team2 = new GameObject[teamSize];
+		int[] unitTypes = {radioChild, rogue, bomber, brain, brute};
+		
 		for(int i = 0; i < start.Length && i < teamSize; i++){
-			team2[i] = Instantiate(Unit) as GameObject;
 			location = ground.grid[(int)start[i].y, (int)start[i].x].transform.localPosition;
 			location.y += 5;
-			team2[i].transform.localPosition = location;
-		}
-		
-		int[] unitTypes = {radioChild, rogue, bomber, brain, brute};
-		for(int i = 0; i < teamSize; i++){
 			UnitScript u;
-			u = team2[i].AddComponent("UnitScript") as UnitScript;
-			u.location = start[i];
 			if(unitTypes[0] > 0){
+				team2[i] = Instantiate(RadioChild) as GameObject;
+				team2[i].transform.localPosition = location;
+				u = team2[i].AddComponent("UnitScript") as UnitScript;
 				setUnit(team2[i], "radioChild");
 				unitTypes[0]--;
 			}else if(unitTypes[1] > 0){
+				team2[i] = Instantiate(Rogue) as GameObject;
+				team2[i].transform.localPosition = location;
+				u = team2[i].AddComponent("UnitScript") as UnitScript;
 				setUnit(team2[i], "rogue");
 				unitTypes[1]--;
 			}else if(unitTypes[2] > 0){
+				team2[i] = Instantiate(Bomber) as GameObject;
+				team2[i].transform.localPosition = location;
+				u = team2[i].AddComponent("UnitScript") as UnitScript;
 				setUnit(team2[i], "bomber");
 				unitTypes[2]--;
 			}else if(unitTypes[3] > 0){
+				team2[i] = Instantiate(Brain) as GameObject;
+				team2[i].transform.localPosition = location;
+				u = team2[i].AddComponent("UnitScript") as UnitScript;
 				setUnit(team2[i], "brain");
 				unitTypes[3]--;
 			}else {
+				team2[i] = Instantiate(Brute) as GameObject;
+				team2[i].transform.localPosition = location;
+				u = team2[i].AddComponent("UnitScript") as UnitScript;
 				setUnit(team2[i], "brute");
 			}
+			u.location = start[i];
 			setTeam (team2[i], 2);
 		}
 	}
