@@ -127,7 +127,7 @@ public class UnitMaster : MonoBehaviour
 			u.location = start[i];
 			setTeam (team1[i], 1);	
 			
-			team1[i].renderer.material.color = Color.blue;
+//			team1[i].renderer.material.color = Color.blue;
 		}
 //		Debug.Log("Team1Complete");
 	}
@@ -175,7 +175,7 @@ public class UnitMaster : MonoBehaviour
 			}
 			u.location = start[i];
 			setTeam (team2[i], 2);
-			team2[i].renderer.material.color = Color.red;
+//			team2[i].renderer.material.color = Color.red;
 		}
 	}
 	
