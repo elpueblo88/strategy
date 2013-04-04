@@ -20,9 +20,10 @@ public class UnitMaster : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		ground = gameObject.GetComponent<MakeGround>();
-		
-		
+		GameMaster = GameObject.FindGameObjectWithTag("GameMaster");
+		ground = GameMaster.GetComponent<MakeGround>();
+		if(!ground)
+			Debug.Log ("ground not found");
 		
 	}
 	
@@ -54,6 +55,7 @@ public class UnitMaster : MonoBehaviour
 	
 	void teamSetup (){
 //		Debug.Log("Message recieved");
+		Start ();
 		setDefaults();
 		team1Make();
 		team2Make();
