@@ -29,16 +29,15 @@ public class AIMaster : MonoBehaviour {
 				
 				LinkedList<Vector2> positionList = gameMasterScript.changeGroundColorMaster(new PlayerMovement((int)unitScript.location.x,(int)unitScript.location.y, unitScript.moveSpeed, 2));
 				
+				Vector2 nextPosition = new Vector2();
 				if(unitScript.unitType == "radioChild"){
-					Vector2 bestPosition;
 					if(positionList.Count != 0){
-						foreach(Vector2 goalLocation in makeGroundScript){
-							/*
-							if(bestPosition == null && makeGroundScript.grid[goalLocation.y][goalLocation.x].GetComponent<TerrainScript>().){
-								bestPosition = goalLocation;
-							}else{
-								if(Vector2.Distance()	
-							}*/
+						foreach(Vector2 goalLocation in makeGroundScript.goalLocations){
+							if(makeGroundScript.grid[(int)goalLocation.y,(int)goalLocation.x].GetComponent<TerrainScript>().taken == 0){
+								if(nextPosition == null || (Vector2.Distance(nextPosition,unitScript.location) > Vector2.Distance(unitScript.location,goalLocation))){
+									nextPosition = goalLocation;
+								}
+							}
 						}
 					}else{
 						
