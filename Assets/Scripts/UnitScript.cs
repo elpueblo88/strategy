@@ -53,6 +53,10 @@ public class UnitScript : MonoBehaviour
 		terrain = ground.grid[(int)location.y, (int)location.x].GetComponent<TerrainScript>();
 		terrain.SendMessage("UnitSelected", gameObject);
 		interaction.SendMessage("NewUnitSelected", gameObject);
+		
+		// rxl244: update interface when unit is clicked on
+		gameMaster.SendMessage("updateUnitInfo",new float[]{this.hp,this.atkPower,this.moveSpeed,this.team});
+		gameMaster.SendMessage("updateName",this.unitType);
 	}
 	void OnMouseUp(){
 		gameObject.renderer.material.color = storeColor;

@@ -40,12 +40,27 @@ public class Interface : MonoBehaviour {
 	private const int INFO_TYPE_UNIT = 1;
 	private const int INFO_TYPE_TERRAIN = 2;
 	
+	// Unit info indices
+	private const int I_HEALTH = 0;
+	private const int I_POWER = 1;
+	private const int I_MOVEMENT = 2;
+	private const int I_TEAM = 3;
+	
+	private string[] UNIT_LABELS = new string[]{
+		"Health: ",
+		"Attack Power: ",
+		"Movement: ",
+		"Team: "
+	};
+	
 	private const KeyCode KEY_HELP = KeyCode.H;
 	
 	private bool displayHelp = false;
 	private int infoType;
 	
-	//private float[] unitInfo;
+	private float[] unitInfo;
+	private float[] terrainInfo;
+	private string selectedName = "";
 	
 	// Use this for initialization
 	void Start () {
@@ -79,6 +94,14 @@ public class Interface : MonoBehaviour {
 		case INFO_TYPE_NONE:
 			break;
 		case INFO_TYPE_UNIT:
+			if(unitInfo != null && unitInfo.Length > 0){
+				float labelHeight = (BOX_HEIGHT - BUTTON_HEIGHT)/(unitInfo.Length + 1);
+				GUI.Label(new Rect(Screen.width*BOX_X,Screen.height*BOX_Y,Screen.width*BOX_WIDTH,Screen.height*labelHeight),selectedName);
+				print ("" + labelHeight);
+				for(int i = 0; i < unitInfo.Length; i++){
+					GUI.Label(new Rect(Screen.width*BOX_X,Screen.height*BOX_Y + Screen.height*(i+1)*labelHeight,Screen.width*BOX_WIDTH,Screen.height*labelHeight),UNIT_LABELS[i] + unitInfo[i]);
+				}
+			}
 			break;
 		case INFO_TYPE_TERRAIN:
 			break;
@@ -128,14 +151,20 @@ public class Interface : MonoBehaviour {
 	}
 	
 	private void updateUnitInfo(float[] unitInfo){
-		//this.unitInfo = unitInfo;
+		this.unitInfo = unitInfo;
+		infoType = INFO_TYPE_UNIT;
 	}
 	
-	private void updateTerrainInfo(){
-		
+	private void updateName(string name){
+		selectedName = name;
+	}
+	
+	private void updateTerrainInfo(float[] terrainInfo){
+		this.terrainInfo = terrainInfo;
+		infoType = INFO_TYPE_TERRAIN;
 	}
 	
 	private void cancelInfo(){
-		
+		infoType = INFO_TYPE_NONE;
 	}
 }

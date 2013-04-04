@@ -108,7 +108,7 @@ public class CameraControl : MonoBehaviour {
 			cameraBox.transform.Translate(0, 0, Time.deltaTime * zSpeed);	
 		}
 		
-		if(Input.GetButton("CamDown") && cameraBox.transform.localPosition.z > zMin + zMinExtra)
+		if(Input.GetButton("CamDown") && cameraBox.transform.localPosition.z > zMin - zMinExtra)
 		{
 			cameraBox.transform.Translate(0, 0, Time.deltaTime * -zSpeed);	
 		}

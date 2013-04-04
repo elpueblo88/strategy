@@ -98,6 +98,8 @@ public class GameMaster : MonoBehaviour {
 	{
 		if(currentPlayer == 1)
 		{
+			// rxl244: tell the interface to clear itself, then run the ai script
+			this.gameObject.SendMessage("cancelInfo");
 			currentPlayer = 2;	
 			this.gameObject.SendMessage("runAI");
 		}
