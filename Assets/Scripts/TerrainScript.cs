@@ -34,7 +34,7 @@ public class TerrainScript : MonoBehaviour {
 	}
 	
 	//changes color of ground
-	void OnMouseDown()
+	void UnitSelected()
 	{
 		PlayerMovement playMove = new PlayerMovement(xValue, zValue, 4, 1);
 		gameMaster.SendMessage("changeGroundColorMaster", playMove);

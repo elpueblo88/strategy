@@ -46,7 +46,7 @@ public class UnitScript : MonoBehaviour
 		storeColor = gameObject.renderer.material.color;
 		gameObject.renderer.material.color = Color.white;
 		terrain = ground.grid[(int)location.y, (int)location.x].GetComponent<TerrainScript>();
-		terrain.SendMessage("OnMouseDown");
+		terrain.SendMessage("UnitSelected");
 	}
 	void OnMouseUp(){
 		gameObject.renderer.material.color = storeColor;
