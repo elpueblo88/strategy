@@ -20,6 +20,7 @@ public class GameMaster : MonoBehaviour {
 	MakeGround ground;
 	GridFunction gridFunc;
 	UnitMaster units; //gdm37
+	InteractionControl interaction; //gdm37
 	
 	//GUI things
 	public GUIStyle bottomArea;
@@ -54,6 +55,7 @@ public class GameMaster : MonoBehaviour {
 		ground = gameObject.GetComponent<MakeGround>();
 		gridFunc = gameObject.GetComponent<GridFunction>();
 		units = gameObject.GetComponent<UnitMaster>(); //gdm37
+		interaction = gameObject.GetComponent<InteractionControl>(); //gdm37
 		
 		//used to set up attributes of board and then create it
 		ground.SendMessage("setTerrainAttributes");
@@ -75,6 +77,7 @@ public class GameMaster : MonoBehaviour {
 	//will call gridFunction to change ground color to show movemnt allowed
 	public LinkedList<Vector2> changeGroundColorMaster(PlayerMovement play)
 	{		
+		LinkedList<Vector2> destinations;
 		//removes last showed movement
 		if(lastPlayMove != null)
 		{
@@ -83,7 +86,9 @@ public class GameMaster : MonoBehaviour {
 		}
 		
 		lastPlayMove = play;
-		return gridFunc.colorGroundFromUnit(play);
+		destinations = gridFunc.colorGroundFromUnit(play);
+		interaction.SendMessage("SetViableMoves", destinations);
+		return destinations;
 	}
 	
 	//Message Center

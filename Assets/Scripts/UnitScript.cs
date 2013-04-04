@@ -41,7 +41,7 @@ public class UnitScript : MonoBehaviour
 		storeColor = gameObject.renderer.material.color;
 		gameObject.renderer.material.color = Color.white;
 		terrain = ground.grid[(int)location.y, (int)location.x].GetComponent<TerrainScript>();
-		terrain.SendMessage("UnitSelected");
+		terrain.SendMessage("UnitSelected", gameObject);
 		interaction.SendMessage("NewUnitSelected", gameObject);
 	}
 	void OnMouseUp(){
@@ -49,6 +49,9 @@ public class UnitScript : MonoBehaviour
 	}
 	
 	public void moveTo (Vector2 spot){
+		terrain.SendMessage("switchOccupied");
+		terrain = ground.grid[(int)spot.y, (int)spot.x].GetComponent<TerrainScript>();
+		terrain.SendMessage("switchOccupied");
 		Vector3 destination = ground.grid[(int)spot.y, (int)spot.x].transform.localPosition;
 		destination.y += 5;
 		location = spot;

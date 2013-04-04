@@ -23,6 +23,7 @@ public class TerrainScript : MonoBehaviour {
 	
 	//gdm37::necessary for movement communication
 	InteractionControl interaction;
+	UnitScript uScript;
 
 	// Use this for initialization
 	void Start () 
@@ -40,9 +41,10 @@ public class TerrainScript : MonoBehaviour {
 	}
 	
 	//changes color of ground
-	void UnitSelected()
+	void UnitSelected (GameObject unit)
 	{
-		PlayerMovement playMove = new PlayerMovement(xValue, zValue, 4, 1);
+		uScript = unit.GetComponent<UnitScript>();
+		PlayerMovement playMove = new PlayerMovement(xValue, zValue, uScript.moveSpeed, uScript.team);
 		gameMaster.SendMessage("changeGroundColorMaster", playMove);
 	}
 	
