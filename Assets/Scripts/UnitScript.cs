@@ -53,9 +53,9 @@ public class UnitScript : MonoBehaviour
 	void OnMouseDown(){
 			storeColor = gameObject.renderer.material.color;
 			gameObject.renderer.material.color = Color.white;
-			terrain = ground.grid[(int)location.y, (int)location.x].GetComponent<TerrainScript>();
 		// rxl244: added if statement to prevent this unit from looking like it can move when it may not be able to
 		if(!alreadyMoved){
+			terrain = ground.grid[(int)location.y, (int)location.x].GetComponent<TerrainScript>();
 			terrain.SendMessage("UnitSelected", gameObject);
 			interaction.SendMessage("NewUnitSelected", gameObject);
 		}
