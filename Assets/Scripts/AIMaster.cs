@@ -118,6 +118,8 @@ public class AIMaster : MonoBehaviour {
 				}
 			
 				// attack if possible
+				
+				//** Did not get combat to work
 			}
 		}else{
 			gameMaster = GameObject.Find("GameMaster");

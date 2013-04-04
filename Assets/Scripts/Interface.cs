@@ -57,14 +57,12 @@ public class Interface : MonoBehaviour {
 		"click mouse (context sensitive):",
 		"\tselect unit",
 		"\tmove unit",
-		"\tselect unit to attack",
 		"\tselect terrain (view info)",
 		"h: close help",
 		"",
 		"Objective:",
 		"Use your radioactive child to capture 3 radioactive spots.",
-		"OR: Kill all enemy units.",
-		"Tie: both radio-child units die."
+		"before the AI captures 3 spots"
 	};
 	
 	// constants used to determine which format the info box will display things in
@@ -89,7 +87,7 @@ public class Interface : MonoBehaviour {
 	// array of labels for terrain attributes
 	private string[] TERRAIN_LABELS = new string[]{	
 		"Movement Cost: ",
-		"Taken: "
+		"Team: "
 	};
 	
 	// the keycode for the in game help key
@@ -110,6 +108,7 @@ public class Interface : MonoBehaviour {
 	private GUIStyle superStyle = null;
 	
 	// constants for determining which win message to display
+	//**Note: a tie would occurr if both radioChild objects died, but combat was never implemented
 	public const int TEAM_NONE = 0;
 	public const int TEAM_PLAYER = 1;
 	public const int TEAM_AI = 2;
@@ -217,7 +216,7 @@ public class Interface : MonoBehaviour {
 				// Using the computed labelHeight, it makes uniform labels for each attribute
 				for(int i = 0; i < unitInfo.Length; i++){
 					if(i == I_TEAM){
-						string team = "player";
+						string team = "Player";
 						if(unitInfo[I_TEAM] == 2){
 							team = "AI";	
 						}
@@ -235,7 +234,19 @@ public class Interface : MonoBehaviour {
 				float labelHeight = (BOX_HEIGHT - BUTTON_HEIGHT)/(terrainInfo.Length + 4);
 				GUI.Label(new Rect(Screen.width*BOX_X,Screen.height*BOX_Y,Screen.width*BOX_WIDTH,Screen.height*labelHeight),selectedName,titleStyle);
 				for(int i = 0; i < terrainInfo.Length; i++){
-					GUI.Label(new Rect(Screen.width*BOX_X,Screen.height*BOX_Y + Screen.height*(i+1)*labelHeight,Screen.width*BOX_WIDTH,Screen.height*labelHeight),TERRAIN_LABELS[i] + terrainInfo[i],normalStyle);
+					if(i == 1){
+						if(selectedName == "Goal"){
+							string teamName = "Player";
+							if(terrainInfo[i] == 2){
+								teamName = "AI";
+							}else if(terrainInfo[i] == 0){
+								teamName = "Neutral";	
+							}
+							GUI.Label(new Rect(Screen.width*BOX_X,Screen.height*BOX_Y + Screen.height*(i+1)*labelHeight,Screen.width*BOX_WIDTH,Screen.height*labelHeight),TERRAIN_LABELS[i] + teamName,normalStyle);					
+						}
+					}else{
+						GUI.Label(new Rect(Screen.width*BOX_X,Screen.height*BOX_Y + Screen.height*(i+1)*labelHeight,Screen.width*BOX_WIDTH,Screen.height*labelHeight),TERRAIN_LABELS[i] + terrainInfo[i],normalStyle);					
+					}
 				}
 			}
 			break;

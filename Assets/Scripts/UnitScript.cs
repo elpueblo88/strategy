@@ -36,10 +36,10 @@ public class UnitScript : MonoBehaviour
 			Object.Destroy(gameObject);
 		}else{
 			if(team == 1){
-				ground.grid[(int)location.y, (int)location.x].renderer.material.color = Color.magenta;
+				ground.grid[(int)location.y, (int)location.x].renderer.material.color = Color.cyan;
 			}
 			if(team == 2){
-				ground.grid[(int)location.y, (int)location.x].renderer.material.color = Color.yellow;
+				ground.grid[(int)location.y, (int)location.x].renderer.material.color = Color.magenta;
 			}
 		}
 	}
@@ -51,11 +51,10 @@ public class UnitScript : MonoBehaviour
 	}
 	
 	void OnMouseDown(){
-		
-		// rxl244: added if statement to prevent this unit from looking like it can move when it may not be able to
-		if(!alreadyMoved){
 			storeColor = gameObject.renderer.material.color;
 			gameObject.renderer.material.color = Color.white;
+		// rxl244: added if statement to prevent this unit from looking like it can move when it may not be able to
+		if(!alreadyMoved){
 			terrain = ground.grid[(int)location.y, (int)location.x].GetComponent<TerrainScript>();
 			terrain.SendMessage("UnitSelected", gameObject);
 			interaction.SendMessage("NewUnitSelected", gameObject);
@@ -76,7 +75,7 @@ public class UnitScript : MonoBehaviour
 		}else{
 			alreadyMoved = true;	
 		}
-		terrain = ground.grid[(int)spot.y, (int)spot.x].GetComponent<TerrainScript>();
+//		terrain = ground.grid[(int)location.y, (int)location.x].GetComponent<TerrainScript>();
 		terrain.SendMessage("switchOccupied");
 		terrain = ground.grid[(int)spot.y, (int)spot.x].GetComponent<TerrainScript>();
 		terrain.SendMessage("switchOccupied");
@@ -84,6 +83,15 @@ public class UnitScript : MonoBehaviour
 		destination.y += 5;
 		location = spot;
 		gameObject.transform.localPosition = destination;
+		
+		// rxl244: so the player can win (AI does this in the AI Master script
+		if(unitType == "radioChild" && team == 1){
+			foreach(Vector2 goalLocation in ground.goalLocations){
+				if(location.x == goalLocation.x && location.y == goalLocation.y){
+					ground.grid[(int)goalLocation.y,(int)goalLocation.x].GetComponent<TerrainScript>().SendMessage("setTaken",1);
+				}
+			}
+		}
 	}
 	
 	// rxl244: call through send message allow the unit to move again
