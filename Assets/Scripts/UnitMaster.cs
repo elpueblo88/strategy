@@ -184,22 +184,27 @@ public class UnitMaster : MonoBehaviour
 		if(type == "radioChild"){
 			u.hp = 100;
 			u.moveSpeed = 2;
+			u.atkPower = 100;
 		}
 		if(type == "rogue"){
 			u.hp = 500;
 			u.moveSpeed = 4;
+			u.atkPower = 300;
 		}
 		if(type == "bomber"){
 			u.hp = 300;
 			u.moveSpeed = 4;
+			u.atkPower = 1000;
 		}
 		if(type == "brain"){
 			u.hp = 300;
 			u.moveSpeed = 3;
+			u.atkPower = 0;
 		}
 		if(type == "brute"){
-			u.hp = 900;
+			u.hp = 1000;
 			u.moveSpeed = 2;
+			u.atkPower = 400;
 		}
 	}
 	

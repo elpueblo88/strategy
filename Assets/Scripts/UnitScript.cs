@@ -9,6 +9,7 @@ public class UnitScript : MonoBehaviour
 	
 	public string unitType;
 	public int hp;
+	public int atkPower;
 	public int moveSpeed;
 	public int team;
 	public Vector2 location;
@@ -28,13 +29,22 @@ public class UnitScript : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		if(team == 1){
-			ground.grid[(int)location.y, (int)location.x].renderer.material.color = Color.magenta;
+		if(hp <= 0){
+			Object.Destroy(gameObject);
+		}else{
+			if(team == 1){
+				ground.grid[(int)location.y, (int)location.x].renderer.material.color = Color.magenta;
+			}
+			if(team == 2){
+				ground.grid[(int)location.y, (int)location.x].renderer.material.color = Color.yellow;
+			}
 		}
-		if(team == 2){
-			ground.grid[(int)location.y, (int)location.x].renderer.material.color = Color.yellow;
+	}
+	
+	void OnMouseOver(){
+		if(Input.GetMouseButtonDown(1)){
+			interaction.SendMessage("NewTarget", gameObject);
 		}
-		
 	}
 	
 	void OnMouseDown(){
