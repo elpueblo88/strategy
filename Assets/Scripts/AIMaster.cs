@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class AIMaster : MonoBehaviour {
 
@@ -24,12 +25,25 @@ public class AIMaster : MonoBehaviour {
 			foreach(GameObject unit in team2){
 				UnitScript unitScript = unit.GetComponent<UnitScript>();
 				GameMaster gameMasterScript = gameMaster.GetComponent<GameMaster>();
+				MakeGround makeGroundScript = gameMaster.GetComponent<MakeGround>();
 				
-				gameMasterScript.changeGroundColorMaster(new PlayerMovement(unitScript.x,unitScript.z, unitScript.movement, 2));
-				// find where they should go,
+				LinkedList<Vector2> positionList = gameMasterScript.changeGroundColorMaster(new PlayerMovement((int)unitScript.location.x,(int)unitScript.location.y, unitScript.moveSpeed, 2));
 				
-				// move them
-				
+				if(unitScript.unitType == "radioChild"){
+					foreach(Vector2 goalLocation in makeGroundScript.goalLocations){
+								
+					}
+					
+				}else if(unitScript.unitType == "rogue"){
+					
+				}else if(unitScript.unitType == "bomber"){
+					
+				}else if(unitScript.unitType == "brain"){
+					
+				}else if(unitScript.unitType == "brute"){
+					
+				}
+			
 				// attack if possible
 			}
 		}else{
