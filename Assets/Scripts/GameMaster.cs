@@ -74,12 +74,11 @@ public class GameMaster : MonoBehaviour {
 		if(lastPlayMove != null)
 		{
 			lastPlayMove.player = 3;
-			this.SendMessage("colorGroundFromUnit", lastPlayMove);
+			gridFunc.colorGroundFromUnit(lastPlayMove);
 		}
 		
-		return gridFunc.colorGroundFromUnit(play);
-		//this.SendMessage("colorGroundFromUnit", play);
 		lastPlayMove = play;
+		return gridFunc.colorGroundFromUnit(play);
 	}
 	
 	//Message Center
