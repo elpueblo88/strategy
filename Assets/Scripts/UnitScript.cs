@@ -33,7 +33,7 @@ public class UnitScript : MonoBehaviour
 	void Update ()
 	{
 		if(hp <= 0){
-			Object.Destroy(gameObject);
+			kill();
 		}else{
 			if(team == 1){
 				ground.grid[(int)location.y, (int)location.x].renderer.material.color = Color.cyan;
@@ -77,6 +77,7 @@ public class UnitScript : MonoBehaviour
 		}
 		terrain = ground.grid[(int)location.y, (int)location.x].GetComponent<TerrainScript>();
 		terrain.SendMessage("switchOccupied");
+		ground.grid[(int)location.y, (int)location.x].renderer.material.color = Color.white;
 		terrain = ground.grid[(int)spot.y, (int)spot.x].GetComponent<TerrainScript>();
 		terrain.SendMessage("switchOccupied");
 		Vector3 destination = ground.grid[(int)spot.y, (int)spot.x].transform.localPosition;
@@ -92,6 +93,14 @@ public class UnitScript : MonoBehaviour
 				}
 			}
 		}
+	}
+	
+	void kill (){
+		Object.Destroy(gameObject);
+		ground.grid[(int)location.y, (int)location.x].renderer.material.color = Color.white;
+		terrain = ground.grid[(int)location.y, (int)location.x].GetComponent<TerrainScript>();
+		terrain.occupied = false;
+		hp = 100;
 	}
 	
 	// rxl244: call through send message allow the unit to move again

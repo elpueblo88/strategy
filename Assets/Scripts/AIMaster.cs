@@ -116,9 +116,21 @@ public class AIMaster : MonoBehaviour {
 								}
 							}
 						}
+						
+						if(unitScript.unitType != "radioChild" && targetPosition.x != -1 && Vector2.Distance(targetPosition,unitScript.location) == 10){
+							foreach(GameObject playerUnit in team1){
+								UnitScript playerUnitScript = playerUnit.GetComponent<UnitScript>();
+								if(playerUnitScript.location.x == targetPosition.x && playerUnitScript.location.y == targetPosition.y){
+									gameMaster.GetComponent<InteractionControl>().CombatRoutine(unit,playerUnit);
+									break;
+								}
+							}
+						}
 					}
 				
 					// attack if possible
+					
+					
 					
 					//** Did not get combat to work
 				}

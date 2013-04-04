@@ -69,7 +69,7 @@ public class InteractionControl : MonoBehaviour {
 //		Debug.Log ("unit moved");
 	}
 	
-	void CombatRoutine (GameObject attacker, GameObject defender){
+	public void CombatRoutine (GameObject attacker, GameObject defender){
 		UnitScript atk = attacker.GetComponent<UnitScript>();
 		UnitScript def = defender.GetComponent<UnitScript>();
 		if(atk.location.x == def.location.x){
