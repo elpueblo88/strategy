@@ -32,12 +32,13 @@ public class AIMaster : MonoBehaviour {
 				if(unitScript.unitType == "radioChild"){
 					Vector2 bestPosition;
 					if(positionList.Count != 0){
-						foreach(Vector2 goalLocation in makeGroundScript.grid){
-							if(makeGroundScript.grid[goalLocation.y][goalLocation.x].GetComponent<TerrainScript>().taken == 0){
-								if(bestPosition == null || (Vector2.Distance(bestPosition,unitScript.location) > Vector2.Distance(unitScript.location,goalLocation))){
-									bestPosition = goalLocation;
-								}
-							}
+						foreach(Vector2 goalLocation in makeGroundScript){
+							/*
+							if(bestPosition == null && makeGroundScript.grid[goalLocation.y][goalLocation.x].GetComponent<TerrainScript>().){
+								bestPosition = goalLocation;
+							}else{
+								if(Vector2.Distance()	
+							}*/
 						}
 					}else{
 						
