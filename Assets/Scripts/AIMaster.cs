@@ -53,6 +53,11 @@ public class AIMaster : MonoBehaviour {
 				}else if(unitScript.unitType == "brute"){
 					
 				}
+				
+				if(nextPosition != null){
+					unit.SendMessage("moveTo",nextPosition);
+				}
+				
 			
 				// attack if possible
 			}
