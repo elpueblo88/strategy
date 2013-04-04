@@ -63,14 +63,11 @@ public class TerrainScript : MonoBehaviour {
 		this.taken = team;
 		
 		MakeGround makeGroundScript = GameObject.Find("GameMaster").GetComponent<MakeGround>();
-		int takenCount = 1;
+		int takenCount = 0;
 
 		foreach(Vector2 goalLocation in makeGroundScript.goalLocations){
-			if(goalLocation.x != this.zValue && goalLocation.y != this.xValue){
-				int taken = makeGroundScript.grid[(int)goalLocation.y,(int)goalLocation.x].GetComponent<TerrainScript>().taken;	
-				if(taken == team){
-					takenCount++;
-				}
+			if(makeGroundScript.grid[(int)goalLocation.y,(int)goalLocation.x].GetComponent<TerrainScript>().taken == team){
+				takenCount++;
 			}
 		}
 		
