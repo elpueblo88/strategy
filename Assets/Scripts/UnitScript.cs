@@ -17,13 +17,15 @@ public class UnitScript : MonoBehaviour
 	public GameObject Rogue;
 	public GameObject Brain;
 	public GameObject Bomber;
+	public GameObject gameMaster;
 	
 	Color storeColor;
 	
 	// Use this for initialization
 	void Start ()
 	{
-		ground = gameObject.GetComponent<MakeGround>();
+		gameMaster = GameObject.FindGameObjectWithTag("GameMaster");
+		ground = gameMaster.GetComponent<MakeGround>();
 		if(team == 1){
 			gameObject.renderer.material.color = Color.magenta;
 		}
@@ -42,7 +44,7 @@ public class UnitScript : MonoBehaviour
 	void OnMouseDown(){
 		storeColor = gameObject.renderer.material.color;
 		gameObject.renderer.material.color = Color.white;
-		terrain = ground.grid[(int)location.x, (int)location.y].GetComponent<TerrainScript>();
+		terrain = ground.grid[(int)location.y, (int)location.x].GetComponent<TerrainScript>();
 		terrain.SendMessage("OnMouseDown");
 	}
 	void OnMouseUp(){

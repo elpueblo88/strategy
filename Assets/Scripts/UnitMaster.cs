@@ -53,14 +53,14 @@ public class UnitMaster : MonoBehaviour
 	}
 	
 	void teamSetup (){
-		Debug.Log("Message recieved");
+//		Debug.Log("Message recieved");
 		setDefaults();
 		team1Make();
 		team2Make();
 	}
 	
 	void team1Make (){
-		Debug.Log ("Team1");
+//		Debug.Log ("Team1");
 		Vector2[] start = ground.player1StartLocations;
 		Vector3 location = Vector3.zero;
 		team1 = new GameObject[teamSize];
@@ -93,11 +93,11 @@ public class UnitMaster : MonoBehaviour
 			}
 			setTeam (team1[i], 1);
 		}
-		Debug.Log("Team1Complete");
+//		Debug.Log("Team1Complete");
 	}
 	
 	void team2Make (){
-		Debug.Log ("Team2");
+//		Debug.Log ("Team2");
 		Vector2[] start = ground.player2StartLocations;
 		Vector3 location = Vector3.zero;
 		team2 = new GameObject[teamSize];
