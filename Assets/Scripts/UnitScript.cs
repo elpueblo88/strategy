@@ -5,6 +5,7 @@ public class UnitScript : MonoBehaviour
 {
 	MakeGround ground;
 	TerrainScript terrain;
+	InteractionControl interaction;
 	
 	public string unitType;
 	public int hp;
@@ -21,13 +22,12 @@ public class UnitScript : MonoBehaviour
 	{
 		gameMaster = GameObject.FindGameObjectWithTag("GameMaster");
 		ground = gameMaster.GetComponent<MakeGround>();
-		
+		interaction = gameMaster.GetComponent<InteractionControl>();
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
-		//ground.grid[(int)location.y, (int)location.x].renderer.material.color = 
 		if(team == 1){
 			ground.grid[(int)location.y, (int)location.x].renderer.material.color = Color.magenta;
 		}
@@ -42,15 +42,17 @@ public class UnitScript : MonoBehaviour
 		gameObject.renderer.material.color = Color.white;
 		terrain = ground.grid[(int)location.y, (int)location.x].GetComponent<TerrainScript>();
 		terrain.SendMessage("UnitSelected");
+		interaction.SendMessage("NewUnitSelected", gameObject);
 	}
 	void OnMouseUp(){
 		gameObject.renderer.material.color = storeColor;
 	}
 	
-	void moveTo (Vector2 spot){
-		Vector3 destination = ground.grid[(int)spot.x, (int)spot.y].transform.localPosition;
+	public void moveTo (Vector2 spot){
+		Vector3 destination = ground.grid[(int)spot.y, (int)spot.x].transform.localPosition;
 		destination.y += 5;
-		location = destination;
+		location = spot;
+		gameObject.transform.localPosition = destination;
 	}
 }
 
