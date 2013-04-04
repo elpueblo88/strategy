@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class AIMaster : MonoBehaviour {
-
+	private const int PRIORITY_ROGUE = 1;
+	
 	private GameObject[] team2;
 	private bool waitForUpdate;
 	private GameObject gameMaster;
@@ -45,13 +46,33 @@ public class AIMaster : MonoBehaviour {
 					
 					
 				}else if(unitScript.unitType == "rogue"){
-					
+					if((	nextPosition = findTarget("bomber")) != null 
+						|| (nextPosition = findTarget("brain")) != null 
+						|| (nextPosition = findTarget("radioChild")) != null  
+						|| (nextPosition = findTarget("rogue")) != null
+						|| (nextPosition = findTarget("brute")) != null){
+					}
 				}else if(unitScript.unitType == "bomber"){
-					
+					if((	nextPosition = findTarget("radioChild")) != null 
+						|| (nextPosition = findTarget("brute")) != null 
+						|| (nextPosition = findTarget("rogue")) != null  
+						|| (nextPosition = findTarget("brain")) != null
+						|| (nextPosition = findTarget("bomber")) != null){
+					}
 				}else if(unitScript.unitType == "brain"){
-					
+					if((	nextPosition = findTarget("brute")) != null 
+						|| (nextPosition = findTarget("radioChild")) != null 
+						|| (nextPosition = findTarget("brain")) != null  
+						|| (nextPosition = findTarget("bomber")) != null
+						|| (nextPosition = findTarget("rogue")) != null){
+					}
 				}else if(unitScript.unitType == "brute"){
-					
+					if((	nextPosition = findTarget("radioChilld")) != null 
+						|| (nextPosition = findTarget("rogue")) != null 
+						|| (nextPosition = findTarget("brute")) != null  
+						|| (nextPosition = findTarget("bomber")) != null
+						|| (nextPosition = findTarget("brain")) != null){
+					}
 				}
 				
 				if(nextPosition != null){
@@ -65,5 +86,11 @@ public class AIMaster : MonoBehaviour {
 			gameMaster = GameObject.Find("GameMaster");
 			runAI ();
 		}
+	}
+	
+	private Vector2 findTarget(string targetType){
+		Vector2 nextTarget = new Vector2();
+		
+		return nextTarget;
 	}
 }

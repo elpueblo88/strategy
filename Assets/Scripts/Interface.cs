@@ -9,7 +9,7 @@ public class Interface : MonoBehaviour {
 	
 	private const float LABEL_HEIGHT = .04f;
 	
-	private float[] unitInfo;
+	//private float[] unitInfo;
 	
 	// Use this for initialization
 	void Start () {
@@ -67,6 +67,6 @@ public class Interface : MonoBehaviour {
 	}
 	
 	private void updateUnitInfo(float[] unitInfo){
-		this.unitInfo = unitInfo;
+		//this.unitInfo = unitInfo;
 	}
 }
