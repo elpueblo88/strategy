@@ -30,9 +30,20 @@ public class AIMaster : MonoBehaviour {
 				LinkedList<Vector2> positionList = gameMasterScript.changeGroundColorMaster(new PlayerMovement((int)unitScript.location.x,(int)unitScript.location.y, unitScript.moveSpeed, 2));
 				
 				if(unitScript.unitType == "radioChild"){
-					foreach(Vector2 goalLocation in makeGroundScript.goalLocations){
-								
+					Vector2 bestPosition;
+					if(positionList.Count != 0){
+						foreach(Vector2 goalLocation in makeGroundScript){
+							/*
+							if(bestPosition == null && makeGroundScript.grid[goalLocation.y][goalLocation.x].GetComponent<TerrainScript>().){
+								bestPosition = goalLocation;
+							}else{
+								if(Vector2.Distance()	
+							}*/
+						}
+					}else{
+						
 					}
+					
 					
 				}else if(unitScript.unitType == "rogue"){
 					
