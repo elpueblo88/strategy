@@ -49,8 +49,8 @@ public class UnitScript : MonoBehaviour
 		gameObject.renderer.material.color = storeColor;
 	}
 	
-	void moveTo (int x, int y){
-		Vector3 destination = ground.grid[x,y].transform.localPosition;
+	void moveTo (Vector2 spot){
+		Vector3 destination = ground.grid[spot.x,spot.y].transform.localPosition;
 		destination.y += 5;
 		location = destination;
 	}
